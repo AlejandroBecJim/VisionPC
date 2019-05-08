@@ -1,36 +1,37 @@
-﻿Build started 05/04/2019 03:24:50 p. m..
-     1>Project "C:\Users\Aleja\documents\visual studio 2013\Projects\VisonPC\VisonPC\VisonPC.vcxproj" on node 2 (Build target(s)).
+﻿Build started 07/05/2019 03:49:23 p. m..
+     1>Project "C:\Users\Aleja\Documents\Visual Studio 2013\Projects\VisionPC\VisonPC\VisonPC.vcxproj" on node 2 (Build target(s)).
      1>ClCompile:
-         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\x86_amd64\CL.exe /c /IC:\opencv\build\include /Zi /nologo /W3 /WX- /sdl /O2 /Oi /GL /D WIN32 /D NDEBUG /D _WINDOWS /D _MBCS /Gm- /EHsc /MD /GS /Gy /fp:precise /Zc:wchar_t /Zc:forScope /Fo"x64\Release\\" /Fd"x64\Release\vc120.pdb" /Gd /TP /errorReport:prompt main.cpp
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\x86_amd64\CL.exe /c /IC:\opencv\build\include /Zi /nologo /W3 /WX- /sdl /O2 /Oi /GL /D WIN32 /D NDEBUG /D _WINDOWS /D _CRT_SECURE_NO_WARNINGS /D _MBCS /Gm- /EHsc /MD /GS /Gy /fp:precise /Zc:wchar_t /Zc:forScope /Fo"x64\Release\\" /Fd"x64\Release\vc120.pdb" /Gd /TP /errorReport:prompt main.cpp
          main.cpp
-     1>c:\users\aleja\documents\visual studio 2013\projects\visonpc\visonpc\functions.h(43): warning C4244: 'argument' : conversion from 'float' to 'int', possible loss of data
-     1>c:\users\aleja\documents\visual studio 2013\projects\visonpc\visonpc\functions.h(884): warning C4091: 'static ' : ignored on left of 'filtros' when no variable is declared
-     1>c:\users\aleja\documents\visual studio 2013\projects\visonpc\visonpc\functions.h(376): warning C4244: 'initializing' : conversion from 'double' to 'int', possible loss of data
-     1>c:\users\aleja\documents\visual studio 2013\projects\visonpc\visonpc\functions.h(377): warning C4244: 'initializing' : conversion from 'double' to 'int', possible loss of data
-     1>c:\users\aleja\documents\visual studio 2013\projects\visonpc\visonpc\functions.h(378): warning C4244: 'initializing' : conversion from 'double' to 'int', possible loss of data
-     1>c:\users\aleja\documents\visual studio 2013\projects\visonpc\visonpc\functions.h(823): warning C4244: 'initializing' : conversion from 'double' to 'int', possible loss of data
-     1>c:\users\aleja\documents\visual studio 2013\projects\visonpc\visonpc\functions.h(824): warning C4244: 'initializing' : conversion from 'double' to 'int', possible loss of data
-     1>c:\users\aleja\documents\visual studio 2013\projects\visonpc\visonpc\functions.h(825): warning C4244: 'initializing' : conversion from 'double' to 'int', possible loss of data
-     1>main.cpp(397): warning C4800: 'LRESULT' : forcing value to bool 'true' or 'false' (performance warning)
-     1>main.cpp(400): warning C4800: 'LRESULT' : forcing value to bool 'true' or 'false' (performance warning)
-     1>main.cpp(403): warning C4800: 'LRESULT' : forcing value to bool 'true' or 'false' (performance warning)
-     1>main.cpp(406): warning C4800: 'LRESULT' : forcing value to bool 'true' or 'false' (performance warning)
-     1>main.cpp(409): warning C4800: 'LRESULT' : forcing value to bool 'true' or 'false' (performance warning)
-     1>main.cpp(412): warning C4800: 'LRESULT' : forcing value to bool 'true' or 'false' (performance warning)
-     1>main.cpp(415): warning C4800: 'LRESULT' : forcing value to bool 'true' or 'false' (performance warning)
-     1>main.cpp(418): warning C4800: 'LRESULT' : forcing value to bool 'true' or 'false' (performance warning)
-     1>main.cpp(421): warning C4800: 'LRESULT' : forcing value to bool 'true' or 'false' (performance warning)
-     1>main.cpp(424): warning C4800: 'LRESULT' : forcing value to bool 'true' or 'false' (performance warning)
-     1>main.cpp(427): warning C4800: 'LRESULT' : forcing value to bool 'true' or 'false' (performance warning)
-     1>main.cpp(430): warning C4800: 'LRESULT' : forcing value to bool 'true' or 'false' (performance warning)
+     1>c:\users\aleja\documents\visual studio 2013\projects\visionpc\visonpc\functions.h(54): warning C4244: 'argument' : conversion from 'float' to 'int', possible loss of data
+     1>c:\users\aleja\documents\visual studio 2013\projects\visionpc\visonpc\functions.h(55): warning C4244: 'argument' : conversion from 'float' to 'int', possible loss of data
+     1>c:\users\aleja\documents\visual studio 2013\projects\visionpc\visonpc\functions.h(729): warning C4091: 'static ' : ignored on left of 'filtros' when no variable is declared
+     1>c:\users\aleja\documents\visual studio 2013\projects\visionpc\visonpc\functions.h(221): warning C4244: 'initializing' : conversion from 'double' to 'int', possible loss of data
+     1>c:\users\aleja\documents\visual studio 2013\projects\visionpc\visonpc\functions.h(222): warning C4244: 'initializing' : conversion from 'double' to 'int', possible loss of data
+     1>c:\users\aleja\documents\visual studio 2013\projects\visionpc\visonpc\functions.h(223): warning C4244: 'initializing' : conversion from 'double' to 'int', possible loss of data
+     1>c:\users\aleja\documents\visual studio 2013\projects\visionpc\visonpc\functions.h(668): warning C4244: 'initializing' : conversion from 'double' to 'int', possible loss of data
+     1>c:\users\aleja\documents\visual studio 2013\projects\visionpc\visonpc\functions.h(669): warning C4244: 'initializing' : conversion from 'double' to 'int', possible loss of data
+     1>c:\users\aleja\documents\visual studio 2013\projects\visionpc\visonpc\functions.h(670): warning C4244: 'initializing' : conversion from 'double' to 'int', possible loss of data
+     1>main.cpp(540): warning C4800: 'LRESULT' : forcing value to bool 'true' or 'false' (performance warning)
+     1>main.cpp(553): warning C4800: 'LRESULT' : forcing value to bool 'true' or 'false' (performance warning)
+     1>main.cpp(566): warning C4800: 'LRESULT' : forcing value to bool 'true' or 'false' (performance warning)
+     1>main.cpp(579): warning C4800: 'LRESULT' : forcing value to bool 'true' or 'false' (performance warning)
+     1>main.cpp(592): warning C4800: 'LRESULT' : forcing value to bool 'true' or 'false' (performance warning)
+     1>main.cpp(605): warning C4800: 'LRESULT' : forcing value to bool 'true' or 'false' (performance warning)
+     1>main.cpp(618): warning C4800: 'LRESULT' : forcing value to bool 'true' or 'false' (performance warning)
+     1>main.cpp(631): warning C4800: 'LRESULT' : forcing value to bool 'true' or 'false' (performance warning)
+     1>main.cpp(644): warning C4800: 'LRESULT' : forcing value to bool 'true' or 'false' (performance warning)
+     1>main.cpp(657): warning C4800: 'LRESULT' : forcing value to bool 'true' or 'false' (performance warning)
+     1>main.cpp(670): warning C4800: 'LRESULT' : forcing value to bool 'true' or 'false' (performance warning)
+     1>main.cpp(683): warning C4800: 'LRESULT' : forcing value to bool 'true' or 'false' (performance warning)
        Link:
-         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\x86_amd64\link.exe /ERRORREPORT:PROMPT /OUT:"C:\Users\Aleja\documents\visual studio 2013\Projects\VisonPC\x64\Release\VisonPC.exe" /INCREMENTAL:NO /NOLOGO /LIBPATH:C:\opencv\build\x64\vc14\lib opencv_world345.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"C:\Users\Aleja\documents\visual studio 2013\Projects\VisonPC\x64\Release\VisonPC.pdb" /SUBSYSTEM:WINDOWS /OPT:REF /OPT:ICF /LTCG /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:\Users\Aleja\documents\visual studio 2013\Projects\VisonPC\x64\Release\VisonPC.lib" /MACHINE:X64 x64\Release\VisonPC.res
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\x86_amd64\link.exe /ERRORREPORT:PROMPT /OUT:"C:\Users\Aleja\Documents\Visual Studio 2013\Projects\VisionPC\x64\Release\VisonPC.exe" /INCREMENTAL:NO /NOLOGO /LIBPATH:C:\opencv\build\x64\vc14\lib opencv_world345.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"C:\Users\Aleja\Documents\Visual Studio 2013\Projects\VisionPC\x64\Release\VisonPC.pdb" /SUBSYSTEM:WINDOWS /OPT:REF /OPT:ICF /LTCG /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:\Users\Aleja\Documents\Visual Studio 2013\Projects\VisionPC\x64\Release\VisonPC.lib" /MACHINE:X64 x64\Release\VisonPC.res
          x64\Release\main.obj
          Generating code
          Finished generating code
-         VisonPC.vcxproj -> C:\Users\Aleja\documents\visual studio 2013\Projects\VisonPC\x64\Release\VisonPC.exe
-     1>Done Building Project "C:\Users\Aleja\documents\visual studio 2013\Projects\VisonPC\VisonPC\VisonPC.vcxproj" (Build target(s)).
+         VisonPC.vcxproj -> C:\Users\Aleja\Documents\Visual Studio 2013\Projects\VisionPC\x64\Release\VisonPC.exe
+     1>Done Building Project "C:\Users\Aleja\Documents\Visual Studio 2013\Projects\VisionPC\VisonPC\VisonPC.vcxproj" (Build target(s)).
 
 Build succeeded.
 
-Time Elapsed 00:00:04.12
+Time Elapsed 00:00:03.74
