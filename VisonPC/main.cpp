@@ -94,7 +94,7 @@ LRESULT CALLBACK EditDlgProc(HWND ghDialog, UINT mensaje, WPARAM wParam, LPARAM 
 			hButtonTakePhoto = GetDlgItem(ghDialog, IDC_BUTTON_TAKEPHOTO);
 			hButtonPlayVideo = GetDlgItem(ghDialog, IDC_BUTTON_PLAYVIDEO);
 			hButtonStopVideo = GetDlgItem(ghDialog, IDC_BUTTON_STOPVIDEO);
-			hButtonRecordVideo = GetDlgItem(ghDialog, IDC_BUTTON_STOPVIDEO);
+			hButtonRecordVideo = GetDlgItem(ghDialog, IDC_BUTTON_RECORDVIDEO);
 			hCheckFiltroGaus = GetDlgItem(ghDialog, IDC_CHECK_FILTROGAUS);
 			hCheckFiltroMedia = GetDlgItem(ghDialog, IDC_CHECK_FILTROMEDIA);
 			hCheckFiltroMediaPond = GetDlgItem(ghDialog, IDC_CHECK_FILTROMEDIAP);
@@ -118,6 +118,7 @@ LRESULT CALLBACK EditDlgProc(HWND ghDialog, UINT mensaje, WPARAM wParam, LPARAM 
 			SendMessage(hButtonTakePhoto, BM_SETIMAGE, IMAGE_BITMAP, (LPARAM)iconTakePhoto);
 			SendMessage(hButtonPlayVideo, BM_SETIMAGE, IMAGE_BITMAP, (LPARAM)iconPlayVideo);
 			SendMessage(hButtonStopVideo, BM_SETIMAGE, IMAGE_BITMAP, (LPARAM)iconStopVideo);
+			SendMessage(hButtonRecordVideo, BM_SETIMAGE, IMAGE_BITMAP, (LPARAM)iconRecordVideo);
 
 
 			
