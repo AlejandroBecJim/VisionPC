@@ -44,6 +44,7 @@ HBITMAP iconCamMode;
 HBITMAP	iconTakePhoto;
 HBITMAP iconPlayVideo;
 HBITMAP iconStopVideo;
+HBITMAP iconRecordVideo;
 float tamanioIdealX = 400;
 float tamanioIdealY = 400;
 float escalaX = 1;
@@ -854,6 +855,7 @@ public:
 		Mat iconTake = imread("icons/iconObturador.jpg");
 		Mat iconPlay = imread("icons/iconPlay.jpg");
 		Mat iconStop = imread("icons/iconStop.jpg");
+		Mat iconRecord = imread("icons/iconRecord.jpg");
 
 		Mat background = Mat(720, 1420, CV_8UC3);
 
@@ -870,6 +872,7 @@ public:
 		iconTakePhoto = ConvertCVMatToBMP(iconTake);
 		iconPlayVideo = ConvertCVMatToBMP(iconPlay);
 		iconStopVideo = ConvertCVMatToBMP(iconStop);
+		iconRecordVideo = ConvertCVMatToBMP(iconRecord);
 
 	}
 
