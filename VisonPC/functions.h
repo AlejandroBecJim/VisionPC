@@ -21,18 +21,18 @@ using namespace cv;
 #define M_PI 3.14159265358979323846 
 #define Euler 2.718281828
 
-#define MEDIA				1
-#define LAPLACIAN			2
-#define SUB_MEDIA			3
-#define ALAPLACIAN			4
-#define GAUSIAN				5
-#define MEDIA_POND			6
-#define NORTH				7
-#define EAST				8
-#define CSOBEL				9
-#define FSOBEL				10
-#define GRAY				11
-#define THRESH				12
+#define MEDIA				111
+#define LAPLACIAN			211
+#define SUB_MEDIA			311
+#define ALAPLACIAN			411
+#define GAUSIAN				511
+#define MEDIA_POND			611
+#define NORTH				711
+#define EAST				811
+#define CSOBEL				911
+#define FSOBEL				1210
+#define GRAY				1211
+#define THRESH				1212
 
 
 #pragma region VARIABLES GLOBALES
@@ -45,15 +45,15 @@ HBITMAP	iconTakePhoto;
 HBITMAP iconPlayVideo;
 HBITMAP iconStopVideo;
 HBITMAP iconRecordVideo;
-float tamanioIdealX = 400;
-float tamanioIdealY = 400;
+float tamanioIdealX = 640;
+float tamanioIdealY = 480;
 float escalaX = 1;
 float escalaY = 1;
 int filas=0;
 int columnas=0;
 Mat imgPrueba;
-Mat dstPrueba = Mat(tamanioIdealX, tamanioIdealY, CV_8UC3);
-Mat final=Mat(tamanioIdealX, tamanioIdealY, CV_8UC3);
+Mat dstPrueba = Mat(tamanioIdealY, tamanioIdealX, CV_8UC3);
+Mat final=Mat(tamanioIdealY, tamanioIdealX, CV_8UC3);
 uchar **gausian_mask;
 uchar **media_mask;
 uchar **mediaPondered_mask;
@@ -64,9 +64,23 @@ int **nort_mask;
 int **east_mask;
 int **cSobel_mask;
 int **fSobel_mask;
-int histogram[255];
+
+int cdfR[255] = { 0 };
+int cdfG[255] = { 0 };
+int cdfB[255] = { 0 };
+float prkR[255] = { 0 };
+float prkG[255] = { 0 };
+float prkB[255] = { 0 };
+uchar skR[255] = { 0 };
+uchar skG[255] = { 0 };
+uchar skB[255] = { 0 };
+int R=0;
+int G=0;
+int B=0;
+
 int orden[4] = {0};
 int contador;
+
 bool checkedFiltroGaus=false;
 bool checkedFiltroMedia = false;
 bool checkedFiltroMediaP = false;
@@ -483,11 +497,79 @@ public:
 		fSobel_mask[2][2] = 1;
 	}
 
+	
+
+	
+
+	
+
+	static void EcualizacionSimple(Mat& src){
+		int histogramR[255] = { 0 };
+		int histogramG[255] = { 0 };
+		int histogramB[255] = { 0 };
+		//Sacar el histograma
+		for (int i = 0; i < src.rows; i++){
+			Vec3b* color = src.ptr<Vec3b>(i);
+			for (int j = 0; j < src.cols; j++){
+				histogramR[color[j][2]]++;
+				histogramG[color[j][1]]++;
+				histogramB[color[j][0]]++;
+
+			}
+		}
+		// sacar el cdf
+		int acumuladoR = 0;
+		int acumuladoG = 0;
+		int acumuladoB = 0;
+
+		for (int i = 0; i < 256; i++){
+			acumuladoR += histogramR[i];
+			acumuladoG += histogramG[i];
+			acumuladoB += histogramB[i];
+
+			cdfR[i] = acumuladoR;
+			cdfG[i] = acumuladoG;
+			cdfB[i] = acumuladoB;
+
+		}
+		//sacamos el prk
+		double cantPixel = src.rows*src.cols;
+		for (int i = 0; i < 256; i++){
+			prkR[i] = cdfR[i] / cantPixel;
+			prkG[i] = cdfG[i] / cantPixel;
+			prkB[i] = cdfB[i] / cantPixel;
+		}
+		//sacamos el sk
+		for (int i = 0; i < 256; i++){
+			skR[i] = prkR[i] * 255;
+			skG[i] = prkG[i] * 255;
+			skB[i] = prkB[i] * 255;
+		}
+	}
+
+	static void AplyHistogramSimple(Mat& src,Mat& dst){
+		EcualizacionSimple(src);
+		for (int r = 0; r < src.rows; r++){
+			Vec3b* color = src.ptr<Vec3b>(r);
+			Vec3b* aply = dst.ptr<Vec3b>(r);
+			for (int c = 0; c < src.cols; c++){
+				R = color[c][2];
+				G = color[c][1];
+				B = color[c][0];
+
+				aply[c][2] = skR[R];
+				aply[c][1] = skG[G];
+				aply[c][0] = skB[B];
+			}
+		}
+	}
+
 	static void ApliMask(Mat& src, Mat& dst, int x, int y, uchar** mask) {
 		int bResult = 0, gResult = 0, rResult = 0;
 		int xn = (x / 2 != 0) ? x / 2 : 1;
 		int yn = (y / 2 != 0) ? y / 2 : 1;
 		int div = 0;
+
 		for (int i = 0; i < x; i++) {
 			for (int j = 0; j < y; j++)
 			{
@@ -642,7 +724,6 @@ public:
 
 	}
 
-
 	static void ApliMask(Mat& src, Mat& dst, int x, int y, int** mask, int** mask2) {
 		int bResult = 0, gResult = 0, rResult = 0;
 		int xn = (x / 2 != 0) ? x / 2 : 1;
@@ -757,7 +838,7 @@ public:
 		int px = 0;
 		px = (ancho - width) / 2;
 		ScreenToClient(ghPIAD, &pt);
-		MoveWindow(element, px, pt.y + 10, r.right - r.left, r.bottom - r.top, TRUE);
+		MoveWindow(element, px-50, pt.y + 10, r.right - r.left, r.bottom - r.top, TRUE);
 	}
 
 	void moveElement(HWND element,POINT pt){
@@ -915,86 +996,106 @@ public:
 	}
 
 	void getVideo(HWND ghDialog,int id){
-		Size siz = Size(640, 480);
-		Mat dest;
-		calcularTamañoIdeal(siz);
+		//Size siz = Size(640, 480);
+		
+		//calcularTamañoIdeal(siz);
 		while (true){
+			
 			if (captureVideo){
+				if (contador>4){
+					contador = 4;
+					contador = 4;
+					contador = 4;
+
+				}
+
+
+
+
+
 				start = (double)getTickCount();
 				cam ->read( frame);
 
-				resize(frame, dest, dest.size(), escalaX, escalaY, INTER_AREA);
+				//resize(frame, dest, dest.size(), escalaX, escalaY, INTER_AREA);
+				
+				
 				for (int i = 0; i < contador; i++){
 					if (orden[i] > 0){
 						switch (orden[i])
 						{
-						case MEDIA:{
-							filtros::ApliMask(dest, final, 3, 3, media_mask);
-							final.copyTo(dest);
-						}break;
+							case MEDIA:{
+								filtros::ApliMask(frame, final, 3, 3, media_mask);
+								final.copyTo(frame);
+							}break;
 
-						case LAPLACIAN:{
-							filtros::ApliMask(dest, final, 3, 3, laplacian_mask, LAPLACIAN);
-							final.copyTo(dest);
-						}break;
+							case LAPLACIAN:{
+								filtros::ApliMask(frame, final, 3, 3, laplacian_mask, LAPLACIAN);
+								final.copyTo(frame);
+							}break;
 
-						case SUB_MEDIA:{
-							filtros::ApliMask(dest, final, 3, 3, subsMedia_mask, SUB_MEDIA);
-							final.copyTo(dest);
-						}break;
+							case SUB_MEDIA:{
+								filtros::ApliMask(frame, final, 3, 3, subsMedia_mask, SUB_MEDIA);
+								final.copyTo(frame);
+							}break;
 
-						case ALAPLACIAN:{
-							filtros::ApliMask(dest, final, 3, 3, alaplacian_mask, ALAPLACIAN);
-							final.copyTo(dest);
-						}break;
+							case ALAPLACIAN:{
+								filtros::ApliMask(frame, final, 3, 3, alaplacian_mask, ALAPLACIAN);
+								final.copyTo(frame);
+							}break;
 
-						case GAUSIAN:{
-							filtros::ApliMask(dest, final, 3, 3, gausian_mask);
-							final.copyTo(dest);
-						}break;
+							case GAUSIAN:{
+								filtros::ApliMask(frame, final, 3, 3, gausian_mask);
+								final.copyTo(frame);
+							}break;
 
-						case MEDIA_POND:{
-							filtros::ApliMask(dest, final, 3, 3, mediaPondered_mask);
-							final.copyTo(dest);
-						}break;
+							case MEDIA_POND:{
+								filtros::ApliMask(frame, final, 3, 3, mediaPondered_mask);
+								final.copyTo(frame);
+							}break;
 
-						case NORTH:{
-							filtros::ApliMask(dest, final, 3, 3, nort_mask, ALAPLACIAN);
-							final.copyTo(dest);
-						}break;
+							case NORTH:{
+								filtros::ApliMask(frame, final, 3, 3, nort_mask, ALAPLACIAN);
+								final.copyTo(frame);
+							}break;
 
-						case EAST:{
-							filtros::ApliMask(dest, final, 3, 3, east_mask, ALAPLACIAN);
-							final.copyTo(dest);
-						}break;
+							case EAST:{
+								filtros::ApliMask(frame, final, 3, 3, east_mask, ALAPLACIAN);
+								final.copyTo(frame);
+							}break;
 
-						case CSOBEL:{
-							filtros::ApliMask(dest, final, 3, 3, cSobel_mask, LAPLACIAN);
-							final.copyTo(dest);
-						}break;
+							case CSOBEL:{
+								filtros::ApliMask(frame, final, 3, 3, cSobel_mask, LAPLACIAN);
+								final.copyTo(frame);
+							}break;
 
-						case FSOBEL:{
-							filtros::ApliMask(dest, final, 3, 3, fSobel_mask, LAPLACIAN);
-							final.copyTo(dest);
-						}break;
+							case FSOBEL:{
+								filtros::ApliMask(frame, final, 3, 3, fSobel_mask, LAPLACIAN);
+								final.copyTo(frame);
+							}break;
 
-						case GRAY:{
-							filtros::toGray(dest, final);
-							final.copyTo(dest);
-						}break;
+							case GRAY:{
+								filtros::toGray(frame, final);
+								final.copyTo(frame);
+							}break;
 
-						case THRESH:{
-							filtros::threshold(dest, final, 198, 197);
-							final.copyTo(dest);
-						}break;
+							case THRESH:{
+								//filtros::threshold(frame, final, 198, 197);
+								//final.copyTo(frame);
+								//cvtColor(frame, frame, CV_BGR2GRAY);
+								//equalizeHist(frame,final);
+								filtros::AplyHistogramSimple(frame, final);
+								final.copyTo(frame);
+							}break;
 						}
 					}
 
 				}
+				
 				elapsed = 0;
 				elapsed = 1 / (((double)getTickCount() - start) / getTickFrequency());
 
 				sprintf_s(text, "%f", elapsed);
+				
 
 				if (takePhoto){
 					time_t t = time(0);
@@ -1023,16 +1124,17 @@ public:
 					strcat_s(namefoto, seg);
 
 					strcat_s(namefoto, ".jpg");
-					imwrite(namefoto, dest);
+					imwrite(namefoto, frame);
 					takePhoto = false;
+					Sleep(500);
 				}
 
-				if (takeVideo){
-					wrt->write(dest);
+				if (takeVideo && wrt!=NULL){
+					wrt->write(frame);
 				}
 
 				SendDlgItemMessage(ghDialog, IDC_STATIC_PRINT, WM_SETTEXT, 0, (LPARAM)text);
-				videoFrame = ConvertCVMatToBMP(dest);
+				videoFrame = ConvertCVMatToBMP(frame);
 				SendDlgItemMessage(ghDialog, id, STM_SETIMAGE, IMAGE_BITMAP, (LPARAM)videoFrame);
 			}
 		}
