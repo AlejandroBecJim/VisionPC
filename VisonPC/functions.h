@@ -21,18 +21,21 @@ using namespace cv;
 #define M_PI 3.14159265358979323846 
 #define Euler 2.718281828
 
-#define MEDIA				111
-#define LAPLACIAN			211
-#define SUB_MEDIA			311
-#define ALAPLACIAN			411
-#define GAUSIAN				511
-#define MEDIA_POND			611
-#define NORTH				711
-#define EAST				811
-#define CSOBEL				911
-#define FSOBEL				1210
-#define GRAY				1211
-#define THRESH				1212
+#define MEDIA						500
+#define LAPLACIAN					501
+#define SUB_MEDIA					502
+#define ALAPLACIAN					503
+#define GAUSIAN						504
+#define MEDIA_POND					505
+#define NORTH						506
+#define EAST						507
+#define CSOBEL						508
+#define FSOBEL						509
+#define GRAY						510
+#define THRESH						512
+#define SIMPLE_HITOGRAM				513
+#define EXPONENCIAL_HISTOGRAM		514
+#define UNIFORM_HISTOGRAM			515
 
 
 #pragma region VARIABLES GLOBALES
@@ -64,19 +67,35 @@ int **nort_mask;
 int **east_mask;
 int **cSobel_mask;
 int **fSobel_mask;
+int *histogramR;
+int *histogramG;
+int *histogramB;
 
-int cdfR[255] = { 0 };
-int cdfG[255] = { 0 };
-int cdfB[255] = { 0 };
-float prkR[255] = { 0 };
-float prkG[255] = { 0 };
-float prkB[255] = { 0 };
-uchar skR[255] = { 0 };
-uchar skG[255] = { 0 };
-uchar skB[255] = { 0 };
+
+double cdfR[256] = { 0 };
+double cdfG[256] = { 0 };
+double cdfB[256] = { 0 };
+float prkR[256] = { 0 };
+float prkG[256] = { 0 };
+float prkB[256] = { 0 };
+uchar skRnormal[256] = { 0 };
+uchar skGnormal[256] = { 0 };
+uchar skBnormal[256] = { 0 };
+uchar skRexp[256] = { 0 };
+uchar skGexp[256] = { 0 };
+uchar skBexp[256] = { 0 };
+uchar skRuniform[256] = { 0 };
+uchar skGuniform[256] = { 0 };
+uchar skBuniform[256] = { 0 };
 int R=0;
 int G=0;
 int B=0;
+int tonominR = 0;
+int tonomaxR = 0;
+int tonominG = 0;
+int tonomaxG = 0;
+int tonominB = 0;
+int tonomaxB = 0;
 
 int orden[4] = {0};
 int contador;
@@ -93,7 +112,11 @@ bool checkedFiltroCSobel = false;
 bool checkedFiltroFSobel = false;
 bool checkedFiltroGray = false;
 bool checkedFiltroThreshold = false;
+bool checkedFiltroHistogramSimple = false;
+bool checkedFiltroHistogramExponencial = false;
+bool checkedFiltroHistogramUniforme = false;
 
+float alfa = 0.01;
 #pragma endregion
 
 #pragma region VARIABLES DE VENTANAS
@@ -125,6 +148,10 @@ static HWND hCheckFiltroCSobel = 0;
 static HWND hCheckFiltroFSobel = 0;
 static HWND hCheckFiltroGray = 0;
 static HWND hCheckFiltroThreshold = 0;
+static HWND hCheckFiltroHitogramNormal = 0;
+static HWND hCheckFiltroHistogramExponencial = 0;
+static HWND hCheckFiltroHistogramUniform = 0;
+
 
 
 #pragma endregion
@@ -504,9 +531,10 @@ public:
 	
 
 	static void EcualizacionSimple(Mat& src){
-		int histogramR[255] = { 0 };
-		int histogramG[255] = { 0 };
-		int histogramB[255] = { 0 };
+
+		histogramR = new int[255]{0};
+		histogramG = new int[255]{0};
+		histogramB = new int[255]{0};
 		//Sacar el histograma
 		for (int i = 0; i < src.rows; i++){
 			Vec3b* color = src.ptr<Vec3b>(i);
@@ -541,9 +569,9 @@ public:
 		}
 		//sacamos el sk
 		for (int i = 0; i < 256; i++){
-			skR[i] = prkR[i] * 255;
-			skG[i] = prkG[i] * 255;
-			skB[i] = prkB[i] * 255;
+			skRnormal[i] = prkR[i] * 255;
+			skGnormal[i] = prkG[i] * 255;
+			skBnormal[i] = prkB[i] * 255;
 		}
 	}
 
@@ -557,9 +585,249 @@ public:
 				G = color[c][1];
 				B = color[c][0];
 
-				aply[c][2] = skR[R];
-				aply[c][1] = skG[G];
-				aply[c][0] = skB[B];
+				aply[c][2] = skRnormal[R];
+				aply[c][1] = skGnormal[G];
+				aply[c][0] = skBnormal[B];
+			}
+		}
+	}
+	
+	 
+	static void EcualizacionExponencial(Mat& src){
+
+		histogramR = new int[256]{0};
+		histogramG = new int[256]{0};
+		histogramB = new int[256]{0};
+		//Sacar el histograma
+		for (int i = 0; i < 480; i++){
+			Vec3b* color = src.ptr<Vec3b>(i);
+			for (int j = 0; j < 640; j++){
+				histogramR[color[j][2]]++;
+				histogramG[color[j][1]]++;
+				histogramB[color[j][0]]++;
+
+			}
+		}
+		// sacar el cdf
+		double acumuladoR = 0;
+		double acumuladoG = 0;
+		double acumuladoB = 0;
+
+		for (int i = 0; i < 256; i++){
+			acumuladoR += histogramR[i];
+			acumuladoG += histogramG[i];
+			acumuladoB += histogramB[i];
+
+			cdfR[i] = acumuladoR;
+			cdfG[i] = acumuladoG;
+			cdfB[i] = acumuladoB;
+
+		}
+		//sacamos el prk
+		double cantPixel = src.rows*src.cols;
+		for (int i = 0; i < 256; i++){
+			if ((cdfR[i] / cantPixel)==1){
+				prkR[i] = 0.9;
+			}
+			else{
+				prkR[i] = cdfR[i] / cantPixel;
+			}
+
+			if ((cdfG[i] / cantPixel) == 1){
+				prkG[i] = 0.9;
+			}
+			else{
+				prkG[i] = cdfG[i] / cantPixel;
+
+			}
+			if ((cdfB[i] / cantPixel) == 1){
+				prkB[i] = 0.9;
+			}
+			else{
+				prkB[i] = cdfB[i] / cantPixel;
+			}
+		}
+
+		//sacamos el tono minimo y el maximo
+		
+
+		bool minR = false, maxR = false;
+		bool minG = false, maxG = false;
+		bool minB = false, maxB = false;
+
+		for (int i = 0; i < 256; i++){
+			if (histogramR[i] != 0 && !minR){
+				tonominR = i;
+				minR = true;
+			}
+			if (histogramG[i] != 0 && !minG){
+				tonominG = i;
+				minG = true;
+			}
+			if (histogramB[i] != 0 && !minB){
+				tonominB = i;
+				minB = true;
+			}	
+			if (minR && minG && minB){
+				break;
+			}
+		}
+
+		/*for (int i = 255; i > 0; i--){
+			if (histogramR[i] != 0 && !maxR){
+				tonomaxR = i;
+				maxR = true;
+			}
+			if (histogramG[i] != 0 && !maxG){
+				tonomaxG = i;
+				maxG = true;
+			}
+			if (histogramB[i] != 0 && !maxB){
+				tonomaxB = i;
+				maxB = true;
+			}
+		}*/
+		//sacamos el sk
+		for (int i = 0; i < 256; i++){
+			
+			skRexp[i] = tonominR - (1 / alfa)*(log(1 - prkR[i]));
+			skGexp[i] = tonominG - (1 / alfa)*(log(1 - prkG[i]));
+			skBexp[i] = tonominB - (1 / alfa)*(log(1 - prkB[i]));
+		}
+	}
+
+	static void AplyHistogramExponencial(Mat& src, Mat& dst){
+		EcualizacionExponencial(src);
+		for (int r = 0; r < src.rows; r++){
+			Vec3b* color = src.ptr<Vec3b>(r);
+			Vec3b* aply = dst.ptr<Vec3b>(r);
+			for (int c = 0; c < src.cols; c++){
+				R = color[c][2];
+				G = color[c][1];
+				B = color[c][0];
+
+				aply[c][2] = skRexp[R];
+				aply[c][1] = skGexp[G];
+				aply[c][0] = skBexp[B];
+			}
+		}
+	}
+	static void EcualizacionUniform(Mat& src){
+
+		histogramR = new int[256]{0};
+		histogramG = new int[256]{0};
+		histogramB = new int[256]{0};
+		//Sacar el histograma
+		for (int i = 0; i < 480; i++){
+			Vec3b* color = src.ptr<Vec3b>(i);
+			for (int j = 0; j < 640; j++){
+				histogramR[color[j][2]]++;
+				histogramG[color[j][1]]++;
+				histogramB[color[j][0]]++;
+
+			}
+		}
+		// sacar el cdf
+		double acumuladoR = 0;
+		double acumuladoG = 0;
+		double acumuladoB = 0;
+
+		for (int i = 0; i < 256; i++){
+			acumuladoR += histogramR[i];
+			acumuladoG += histogramG[i];
+			acumuladoB += histogramB[i];
+
+			cdfR[i] = acumuladoR;
+			cdfG[i] = acumuladoG;
+			cdfB[i] = acumuladoB;
+
+		}
+		//sacamos el prk
+		double cantPixel = src.rows*src.cols;
+		for (int i = 0; i < 256; i++){
+			if ((cdfR[i] / cantPixel) == 1){
+				prkR[i] = 0.9;
+			}
+			else{
+				prkR[i] = cdfR[i] / cantPixel;
+			}
+
+			if ((cdfG[i] / cantPixel) == 1){
+				prkG[i] = 0.9;
+			}
+			else{
+				prkG[i] = cdfG[i] / cantPixel;
+
+			}
+			if ((cdfB[i] / cantPixel) == 1){
+				prkB[i] = 0.9;
+			}
+			else{
+				prkB[i] = cdfB[i] / cantPixel;
+			}
+		}
+
+		//sacamos el tono minimo y el maximo
+
+
+		bool minR = false, maxR = false;
+		bool minG = false, maxG = false;
+		bool minB = false, maxB = false;
+
+		for (int i = 0; i < 256; i++){
+			if (histogramR[i] != 0 && !minR){
+				tonominR = i;
+				minR = true;
+			}
+			if (histogramG[i] != 0 && !minG){
+				tonominG = i;
+				minG = true;
+			}
+			if (histogramB[i] != 0 && !minB){
+				tonominB = i;
+				minB = true;
+			}
+			if (minR && minG && minB){
+				break;
+			}
+		}
+
+		for (int i = 255; i > 0; i--){
+			if (histogramR[i] != 0 && !maxR){
+			tonomaxR = i;
+			maxR = true;
+			}
+			if (histogramG[i] != 0 && !maxG){
+			tonomaxG = i;
+			maxG = true;
+			}
+			if (histogramB[i] != 0 && !maxB){
+			tonomaxB = i;
+			maxB = true;
+			}
+		}
+		//sacamos el sk
+		for (int i = 0; i < 256; i++){
+
+			skRuniform[i] = ((tonomaxR-tonominR)*prkR[i])+tonominR;
+			skGuniform[i] = ((tonomaxG-tonominG)*prkG[i])+tonominG;
+			skBuniform[i] = ((tonomaxB-tonominB)*prkB[i])+tonominB;
+		}
+	}
+
+	static void AplyHistogramUniforme(Mat& src, Mat& dst){
+		EcualizacionUniform(src);
+		for (int r = 0; r < src.rows; r++){
+			Vec3b* color = src.ptr<Vec3b>(r);
+			Vec3b* aply = dst.ptr<Vec3b>(r);
+			for (int c = 0; c < src.cols; c++){
+				R = color[c][2];
+				G = color[c][1];
+				B = color[c][0];
+
+				aply[c][2] = skRuniform[R];
+				aply[c][1] = skGuniform[G];
+				aply[c][0] = skBuniform[B];
 			}
 		}
 	}
@@ -838,7 +1106,21 @@ public:
 		int px = 0;
 		px = (ancho - width) / 2;
 		ScreenToClient(ghPIAD, &pt);
-		MoveWindow(element, px-50, pt.y + 10, r.right - r.left, r.bottom - r.top, TRUE);
+		MoveWindow(element, px, pt.y + 10, r.right - r.left, r.bottom - r.top, TRUE);
+	}
+
+	void centerElementX(HWND element,int movex,int movey){
+
+		RECT r;
+
+		GetWindowRect(element, &r); //get window rect of control relative to screen
+		POINT pt = { r.left, r.top }; //new point object using rect x, y
+		int width = 0;
+		width = r.right - r.left;
+		int px = 0;
+		px = (ancho - width) / 2;
+		ScreenToClient(ghPIAD, &pt);
+		MoveWindow(element, px+movex, pt.y + movey, r.right - r.left, r.bottom - r.top, TRUE);
 	}
 
 	void moveElement(HWND element,POINT pt){
@@ -1079,11 +1361,22 @@ public:
 							}break;
 
 							case THRESH:{
-								//filtros::threshold(frame, final, 198, 197);
-								//final.copyTo(frame);
-								//cvtColor(frame, frame, CV_BGR2GRAY);
-								//equalizeHist(frame,final);
+								filtros::threshold(frame, final, 198, 197);
+								final.copyTo(frame);								
+							}break;
+
+							case SIMPLE_HITOGRAM:{
 								filtros::AplyHistogramSimple(frame, final);
+								final.copyTo(frame);
+							}break;
+
+							case EXPONENCIAL_HISTOGRAM:{
+								filtros::AplyHistogramExponencial(frame, final);
+								final.copyTo(frame);
+							}break;
+
+							case UNIFORM_HISTOGRAM:{
+								filtros::AplyHistogramUniforme(frame, final);
 								final.copyTo(frame);
 							}break;
 						}
