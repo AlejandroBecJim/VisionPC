@@ -28,6 +28,9 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrevInstance, PSTR cmdLine, int n
 
 
 	centerElementX(hDisplay);
+	     centerElementX(hStaticPrint,-240,240);
+
+
 	
 
 	MSG mensaje;
@@ -76,18 +79,21 @@ LRESULT CALLBACK EditDlgProc(HWND ghDialog, UINT mensaje, WPARAM wParam, LPARAM 
 			CreateWindow("BUTTON", "", WS_VISIBLE | WS_CHILD | WS_TABSTOP | BS_BITMAP, (ancho / 2) - 67, 520, 57, 57, ghDialog, (HMENU)IDC_BUTTON_PLAYVIDEO, hIntancePIAD, NULL);
 			CreateWindow("BUTTON", "", WS_VISIBLE | WS_CHILD | WS_TABSTOP | BS_BITMAP, (ancho / 2) , 520, 57, 57, ghDialog, (HMENU)IDC_BUTTON_STOPVIDEO, hIntancePIAD, NULL);
 			CreateWindow("BUTTON", "", WS_VISIBLE | WS_CHILD | WS_TABSTOP | BS_BITMAP, (ancho / 2) + 67, 520, 57, 57, ghDialog, (HMENU)IDC_BUTTON_RECORDVIDEO, hIntancePIAD, NULL);
-			CreateWindow("BUTTON", "Gausiano", WS_VISIBLE | WS_CHILD | BS_CHECKBOX | BS_AUTOCHECKBOX, (ancho / 2) + 450, 10, 80, 10, ghDialog, (HMENU)IDC_CHECK_FILTROGAUS, hIntancePIAD, NULL);
-			CreateWindow("BUTTON", "Media Blur", WS_VISIBLE | WS_CHILD | BS_CHECKBOX | BS_AUTOCHECKBOX, (ancho / 2) + 450, 30, 130, 15, ghDialog, (HMENU)IDC_CHECK_FILTROMEDIA, hIntancePIAD, NULL);
-			CreateWindow("BUTTON", "Media Pond. Blur", WS_VISIBLE | WS_CHILD | BS_CHECKBOX | BS_AUTOCHECKBOX, (ancho / 2) + 450, 50, 130, 15, ghDialog, (HMENU)IDC_CHECK_FILTROMEDIAP, hIntancePIAD, NULL);
-			CreateWindow("BUTTON", "Sustrac. Media", WS_VISIBLE | WS_CHILD | BS_CHECKBOX | BS_AUTOCHECKBOX, (ancho / 2) + 450, 70, 130, 15, ghDialog, (HMENU)IDC_CHECK_FILTROSUBMEDIA, hIntancePIAD, NULL);
-			CreateWindow("BUTTON", "Laplaciano", WS_VISIBLE | WS_CHILD | BS_CHECKBOX | BS_AUTOCHECKBOX, (ancho / 2) + 450, 90, 130, 15, ghDialog, (HMENU)IDC_CHECK_FILTROLAPLACIAN, hIntancePIAD, NULL);
-			CreateWindow("BUTTON", "Menos Laplaciano", WS_VISIBLE | WS_CHILD | BS_CHECKBOX | BS_AUTOCHECKBOX, (ancho / 2) + 450, 110, 130, 15, ghDialog, (HMENU)IDC_CHECK_FILTROALAPLACIAN, hIntancePIAD, NULL);
-			CreateWindow("BUTTON", "Norte", WS_VISIBLE | WS_CHILD | BS_CHECKBOX | BS_AUTOCHECKBOX, (ancho / 2) +450, 130, 130, 15, ghDialog, (HMENU)IDC_CHECK_FILTRONORTH, hIntancePIAD, NULL);
-			CreateWindow("BUTTON", "Este", WS_VISIBLE | WS_CHILD | BS_CHECKBOX | BS_AUTOCHECKBOX, (ancho / 2) + 450, 150, 130, 15, ghDialog, (HMENU)IDC_CHECK_FILTROEAST, hIntancePIAD, NULL);
-			CreateWindow("BUTTON", "C Sobel", WS_VISIBLE | WS_CHILD | BS_CHECKBOX | BS_AUTOCHECKBOX, (ancho / 2) + 450, 170, 130, 15, ghDialog, (HMENU)IDC_CHECK_FILTROCSOBEL, hIntancePIAD, NULL);
-			CreateWindow("BUTTON", "F Sobel", WS_VISIBLE | WS_CHILD | BS_CHECKBOX | BS_AUTOCHECKBOX, (ancho / 2) + 450, 190, 130, 15, ghDialog, (HMENU)IDC_CHECK_FILTROFSOBEL, hIntancePIAD, NULL);
-			CreateWindow("BUTTON", "Blanco y Negro", WS_VISIBLE | WS_CHILD | BS_CHECKBOX | BS_AUTOCHECKBOX, (ancho / 2) + 450, 210, 130, 15, ghDialog, (HMENU)IDC_CHECK_FILTROGRAY, hIntancePIAD, NULL);
-			CreateWindow("BUTTON", "Threshold", WS_VISIBLE | WS_CHILD | BS_CHECKBOX | BS_AUTOCHECKBOX, (ancho / 2) + 450, 230, 130, 15, ghDialog, (HMENU)IDC_CHECK_FILTROTHRES, hIntancePIAD, NULL);
+			CreateWindow("BUTTON", "Gausiano", WS_VISIBLE | WS_CHILD | BS_CHECKBOX | BS_AUTOCHECKBOX, (ancho / 2) + 330, 10, 80, 10, ghDialog, (HMENU)IDC_CHECK_FILTROGAUS, hIntancePIAD, NULL);
+			CreateWindow("BUTTON", "Media Blur", WS_VISIBLE | WS_CHILD | BS_CHECKBOX | BS_AUTOCHECKBOX, (ancho / 2) + 330, 30, 130, 15, ghDialog, (HMENU)IDC_CHECK_FILTROMEDIA, hIntancePIAD, NULL);
+			CreateWindow("BUTTON", "Media Pond. Blur", WS_VISIBLE | WS_CHILD | BS_CHECKBOX | BS_AUTOCHECKBOX, (ancho / 2) + 330, 50, 130, 15, ghDialog, (HMENU)IDC_CHECK_FILTROMEDIAP, hIntancePIAD, NULL);
+			CreateWindow("BUTTON", "Sustrac. Media", WS_VISIBLE | WS_CHILD | BS_CHECKBOX | BS_AUTOCHECKBOX, (ancho / 2) + 330, 70, 130, 15, ghDialog, (HMENU)IDC_CHECK_FILTROSUBMEDIA, hIntancePIAD, NULL);
+			CreateWindow("BUTTON", "Laplaciano", WS_VISIBLE | WS_CHILD | BS_CHECKBOX | BS_AUTOCHECKBOX, (ancho / 2) + 330, 90, 130, 15, ghDialog, (HMENU)IDC_CHECK_FILTROLAPLACIAN, hIntancePIAD, NULL);
+			CreateWindow("BUTTON", "Menos Laplaciano", WS_VISIBLE | WS_CHILD | BS_CHECKBOX | BS_AUTOCHECKBOX, (ancho / 2) + 330, 110, 130, 15, ghDialog, (HMENU)IDC_CHECK_FILTROALAPLACIAN, hIntancePIAD, NULL);
+			CreateWindow("BUTTON", "Norte", WS_VISIBLE | WS_CHILD | BS_CHECKBOX | BS_AUTOCHECKBOX, (ancho / 2) +330, 130, 130, 15, ghDialog, (HMENU)IDC_CHECK_FILTRONORTH, hIntancePIAD, NULL);
+			CreateWindow("BUTTON", "Este", WS_VISIBLE | WS_CHILD | BS_CHECKBOX | BS_AUTOCHECKBOX, (ancho / 2) + 330, 150, 130, 15, ghDialog, (HMENU)IDC_CHECK_FILTROEAST, hIntancePIAD, NULL);
+			CreateWindow("BUTTON", "C Sobel", WS_VISIBLE | WS_CHILD | BS_CHECKBOX | BS_AUTOCHECKBOX, (ancho / 2) + 330, 170, 130, 15, ghDialog, (HMENU)IDC_CHECK_FILTROCSOBEL, hIntancePIAD, NULL);
+			CreateWindow("BUTTON", "F Sobel", WS_VISIBLE | WS_CHILD | BS_CHECKBOX | BS_AUTOCHECKBOX, (ancho / 2) + 330, 190, 130, 15, ghDialog, (HMENU)IDC_CHECK_FILTROFSOBEL, hIntancePIAD, NULL);
+			CreateWindow("BUTTON", "Blanco y Negro", WS_VISIBLE | WS_CHILD | BS_CHECKBOX | BS_AUTOCHECKBOX, (ancho / 2) + 330, 210, 130, 15, ghDialog, (HMENU)IDC_CHECK_FILTROGRAY, hIntancePIAD, NULL);
+			CreateWindow("BUTTON", "Threshold", WS_VISIBLE | WS_CHILD | BS_CHECKBOX | BS_AUTOCHECKBOX, (ancho / 2) + 330, 230, 130, 15, ghDialog, (HMENU)IDC_CHECK_FILTROTHRES, hIntancePIAD, NULL);
+			CreateWindow("BUTTON", "Ecualización Hist. Normal", WS_VISIBLE | WS_CHILD | BS_CHECKBOX | BS_AUTOCHECKBOX, (ancho / 2) + 330, 250, 200, 15, ghDialog, (HMENU)IDC_CHECK_FILTRONORMALHISTOGRAM, hIntancePIAD, NULL);
+			CreateWindow("BUTTON", "Ecualización Hist. Exp.", WS_VISIBLE | WS_CHILD | BS_CHECKBOX | BS_AUTOCHECKBOX, (ancho / 2) + 330, 270, 200, 15, ghDialog, (HMENU)IDC_CHECK_FILTROEXPHISTOGRAM, hIntancePIAD, NULL);
+			CreateWindow("BUTTON", "Ecualización Hist. Uniforme", WS_VISIBLE | WS_CHILD | BS_CHECKBOX | BS_AUTOCHECKBOX, (ancho / 2) + 330, 290, 200, 15, ghDialog, (HMENU)IDC_CHECK_FILTROUNIHISTOGRAM, hIntancePIAD, NULL);
 
 			hButtonPhotoMode = GetDlgItem(ghDialog, IDC_BUTTON_PHOTOMODE);
 			hButtonVideoMode = GetDlgItem(ghDialog, IDC_BUTTON_VIDEOMODE);
@@ -107,6 +113,10 @@ LRESULT CALLBACK EditDlgProc(HWND ghDialog, UINT mensaje, WPARAM wParam, LPARAM 
 			hCheckFiltroFSobel = GetDlgItem(ghDialog, IDC_CHECK_FILTROFSOBEL);
 			hCheckFiltroGray = GetDlgItem(ghDialog, IDC_CHECK_FILTROGRAY);
 			hCheckFiltroThreshold = GetDlgItem(ghDialog, IDC_CHECK_FILTROTHRES);
+			hCheckFiltroHitogramNormal = GetDlgItem(ghDialog, IDC_CHECK_FILTRONORMALHISTOGRAM);
+			hCheckFiltroHistogramExponencial = GetDlgItem(ghDialog, IDC_CHECK_FILTROEXPHISTOGRAM);
+			hCheckFiltroHistogramUniform = GetDlgItem(ghDialog, IDC_CHECK_FILTROUNIHISTOGRAM);
+
 						
 			CheckDlgButton(hCheckFiltroGaus, 1, BST_CHECKED);
 			//hComboFiltros = CreateWindow(L"COMBOBOX", L"", CBS_DROPDOWN | CBS_HASSTRINGS | WS_CHILD | WS_OVERLAPPED | WS_VISIBLE, 900, 10, 100, 20, ghDialog, (HMENU)IDC_COMBO_FILTROS, hIntancePIAD, NULL);
@@ -264,6 +274,34 @@ LRESULT CALLBACK EditDlgProc(HWND ghDialog, UINT mensaje, WPARAM wParam, LPARAM 
 				return (INT_PTR)hbrBkgnd;
 			}
 
+			if ((HWND)lParam == GetDlgItem(ghDialog, IDC_CHECK_FILTRONORMALHISTOGRAM))
+			{
+				SetBkMode((HDC)wParam, TRANSPARENT);
+				SetTextColor((HDC)wParam, RGB(255, 255, 255));
+				SetBkColor((HDC)wParam, RGB(30, 30, 30));
+				hbrBkgnd = CreateSolidBrush(RGB(30, 30, 30));
+				return (INT_PTR)hbrBkgnd;
+			}
+
+			if ((HWND)lParam == GetDlgItem(ghDialog, IDC_CHECK_FILTROEXPHISTOGRAM))
+			{
+				SetBkMode((HDC)wParam, TRANSPARENT);
+				SetTextColor((HDC)wParam, RGB(255, 255, 255));
+				SetBkColor((HDC)wParam, RGB(30, 30, 30));
+				hbrBkgnd = CreateSolidBrush(RGB(30, 30, 30));
+				return (INT_PTR)hbrBkgnd;
+			}
+
+			if ((HWND)lParam == GetDlgItem(ghDialog, IDC_CHECK_FILTROUNIHISTOGRAM))
+			{
+				SetBkMode((HDC)wParam, TRANSPARENT);
+				SetTextColor((HDC)wParam, RGB(255, 255, 255));
+				SetBkColor((HDC)wParam, RGB(30, 30, 30));
+				hbrBkgnd = CreateSolidBrush(RGB(30, 30, 30));
+				return (INT_PTR)hbrBkgnd;
+			}
+
+
 			
 		}break;
 
@@ -276,6 +314,8 @@ LRESULT CALLBACK EditDlgProc(HWND ghDialog, UINT mensaje, WPARAM wParam, LPARAM 
 					alto = GetSystemMetrics(SM_CYSCREEN);
 					alto = GetSystemMetrics(SM_CYSCREEN);
 					centerElementX(hDisplay);
+					centerElementX(hStaticPrint,-240,240);
+
 				}break;
 
 				case IDC_BUTTON_PHOTOMODE:{
@@ -359,7 +399,7 @@ LRESULT CALLBACK EditDlgProc(HWND ghDialog, UINT mensaje, WPARAM wParam, LPARAM 
 
 					
 					if (!takePhoto && takeVideo==false){
-						wrt = new VideoWriter(nameVideo, CV_FOURCC('M', 'J', 'P', 'G'), 24, Size(400, 400));
+						wrt = new VideoWriter(nameVideo, CV_FOURCC('M', 'J', 'P', 'G'), 24, Size(640, 480));
 						takeVideo = true;
 					}
 				}break;
@@ -523,6 +563,54 @@ LRESULT CALLBACK EditDlgProc(HWND ghDialog, UINT mensaje, WPARAM wParam, LPARAM 
 					}
 				}break;
 
+				case IDC_CHECK_FILTRONORMALHISTOGRAM:{
+					checkedFiltroHistogramSimple = SendDlgItemMessage(ghDialog, IDC_CHECK_FILTRONORMALHISTOGRAM, BM_GETCHECK, 0, 0);
+					if (checkedFiltroHistogramSimple){
+						if (contador < 4){
+							orden[contador] = SIMPLE_HITOGRAM;
+							contador++;
+
+
+						}
+					}
+					else{
+						deleteFiltro(SIMPLE_HITOGRAM);
+						contador--;
+					}
+				}break;
+
+				case IDC_CHECK_FILTROEXPHISTOGRAM:{
+					checkedFiltroHistogramExponencial = SendDlgItemMessage(ghDialog, IDC_CHECK_FILTROEXPHISTOGRAM, BM_GETCHECK, 0, 0);
+					if (checkedFiltroHistogramExponencial){
+						if (contador < 4){
+							orden[contador] = EXPONENCIAL_HISTOGRAM;
+							contador++;
+
+
+						}
+					}
+					else{
+						deleteFiltro(EXPONENCIAL_HISTOGRAM);
+						contador--;
+					}
+				}break;
+
+				case IDC_CHECK_FILTROUNIHISTOGRAM:{
+					checkedFiltroHistogramUniforme = SendDlgItemMessage(ghDialog, IDC_CHECK_FILTROUNIHISTOGRAM, BM_GETCHECK, 0, 0);
+					if (checkedFiltroHistogramUniforme){
+						if (contador < 4){
+							orden[contador] = UNIFORM_HISTOGRAM;
+							contador++;
+						}
+					}
+					else{
+						deleteFiltro(UNIFORM_HISTOGRAM);
+						contador--;
+					}
+				}break;
+
+
+
 			}
 		}break;
 
@@ -530,7 +618,7 @@ LRESULT CALLBACK EditDlgProc(HWND ghDialog, UINT mensaje, WPARAM wParam, LPARAM 
 			EndDialog(
 				ghDialog, // Handle to dialog to end.
 				0);
-			
+			cam->release();
 		}break;
 		case WM_DESTROY: {
 			EndDialog(
@@ -543,6 +631,8 @@ LRESULT CALLBACK EditDlgProc(HWND ghDialog, UINT mensaje, WPARAM wParam, LPARAM 
 			alto = GetSystemMetrics(SM_CYSCREEN);
 			alto = GetSystemMetrics(SM_CYSCREEN);
 			centerElementX(hDisplay);
+			     centerElementX(hStaticPrint,-240,240);
+
 		}break;
 	}
 
