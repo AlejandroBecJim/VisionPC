@@ -72,22 +72,22 @@ LRESULT CALLBACK EditDlgProc(HWND ghDialog, UINT mensaje, WPARAM wParam, LPARAM 
 			hButtonGenerar = GetDlgItem(ghDialog, IDC_BUTTON_GENERAR);
 			//CreateWindow("BUTTON", "", WS_VISIBLE | WS_CHILD | WS_TABSTOP | BS_BITMAP, 375, 10, 105, 105, ghDialog, (HMENU)IDC_BUTTON_PHOTOMODE, hIntancePIAD, NULL);
 			//CreateWindow("BUTTON", "", WS_VISIBLE | WS_CHILD | WS_TABSTOP | BS_BITMAP, 375, 120, 105, 105, ghDialog, (HMENU)IDC_BUTTON_VIDEOMODE, hIntancePIAD, NULL);
-			CreateWindow("BUTTON", "", WS_VISIBLE | WS_CHILD | WS_TABSTOP | BS_BITMAP, (ancho/2)-134, 420, 57, 57, ghDialog, (HMENU)IDC_BUTTON_TAKEPHOTO, hIntancePIAD, NULL);
-			CreateWindow("BUTTON", "", WS_VISIBLE | WS_CHILD | WS_TABSTOP | BS_BITMAP, (ancho / 2) - 67, 420, 57, 57, ghDialog, (HMENU)IDC_BUTTON_PLAYVIDEO, hIntancePIAD, NULL);
-			CreateWindow("BUTTON", "", WS_VISIBLE | WS_CHILD | WS_TABSTOP | BS_BITMAP, (ancho / 2) , 420, 57, 57, ghDialog, (HMENU)IDC_BUTTON_STOPVIDEO, hIntancePIAD, NULL);
-			CreateWindow("BUTTON", "", WS_VISIBLE | WS_CHILD | WS_TABSTOP | BS_BITMAP, (ancho / 2) + 67, 420, 57, 57, ghDialog, (HMENU)IDC_BUTTON_RECORDVIDEO, hIntancePIAD, NULL);
-			CreateWindow("BUTTON", "Gausiano", WS_VISIBLE | WS_CHILD | BS_CHECKBOX | BS_AUTOCHECKBOX, (ancho / 2) + 250, 10, 80, 10, ghDialog, (HMENU)IDC_CHECK_FILTROGAUS, hIntancePIAD, NULL);
-			CreateWindow("BUTTON", "Media Blur", WS_VISIBLE | WS_CHILD | BS_CHECKBOX | BS_AUTOCHECKBOX, (ancho / 2) + 250, 30, 130, 15, ghDialog, (HMENU)IDC_CHECK_FILTROMEDIA, hIntancePIAD, NULL);
-			CreateWindow("BUTTON", "Media Pond. Blur", WS_VISIBLE | WS_CHILD | BS_CHECKBOX | BS_AUTOCHECKBOX, (ancho / 2) + 250, 50, 130, 15, ghDialog, (HMENU)IDC_CHECK_FILTROMEDIAP, hIntancePIAD, NULL);
-			CreateWindow("BUTTON", "Sustrac. Media", WS_VISIBLE | WS_CHILD | BS_CHECKBOX | BS_AUTOCHECKBOX, (ancho / 2) + 250, 70, 130, 15, ghDialog, (HMENU)IDC_CHECK_FILTROSUBMEDIA, hIntancePIAD, NULL);
-			CreateWindow("BUTTON", "Laplaciano", WS_VISIBLE | WS_CHILD | BS_CHECKBOX | BS_AUTOCHECKBOX, (ancho / 2) + 250, 90, 130, 15, ghDialog, (HMENU)IDC_CHECK_FILTROLAPLACIAN, hIntancePIAD, NULL);
-			CreateWindow("BUTTON", "Menos Laplaciano", WS_VISIBLE | WS_CHILD | BS_CHECKBOX | BS_AUTOCHECKBOX, (ancho / 2) + 250, 110, 130, 15, ghDialog, (HMENU)IDC_CHECK_FILTROALAPLACIAN, hIntancePIAD, NULL);
-			CreateWindow("BUTTON", "Norte", WS_VISIBLE | WS_CHILD | BS_CHECKBOX | BS_AUTOCHECKBOX, (ancho / 2) + 250, 130, 130, 15, ghDialog, (HMENU)IDC_CHECK_FILTRONORTH, hIntancePIAD, NULL);
-			CreateWindow("BUTTON", "Este", WS_VISIBLE | WS_CHILD | BS_CHECKBOX | BS_AUTOCHECKBOX, (ancho / 2) + 250, 150, 130, 15, ghDialog, (HMENU)IDC_CHECK_FILTROEAST, hIntancePIAD, NULL);
-			CreateWindow("BUTTON", "C Sobel", WS_VISIBLE | WS_CHILD | BS_CHECKBOX | BS_AUTOCHECKBOX, (ancho / 2) + 250, 170, 130, 15, ghDialog, (HMENU)IDC_CHECK_FILTROCSOBEL, hIntancePIAD, NULL);
-			CreateWindow("BUTTON", "F Sobel", WS_VISIBLE | WS_CHILD | BS_CHECKBOX | BS_AUTOCHECKBOX, (ancho / 2) + 250, 190, 130, 15, ghDialog, (HMENU)IDC_CHECK_FILTROFSOBEL, hIntancePIAD, NULL);
-			CreateWindow("BUTTON", "Blanco y Negro", WS_VISIBLE | WS_CHILD | BS_CHECKBOX | BS_AUTOCHECKBOX, (ancho / 2) + 250, 210, 130, 15, ghDialog, (HMENU)IDC_CHECK_FILTROGRAY, hIntancePIAD, NULL);
-			CreateWindow("BUTTON", "Threshold", WS_VISIBLE | WS_CHILD | BS_CHECKBOX | BS_AUTOCHECKBOX, (ancho / 2) + 250, 230, 130, 15, ghDialog, (HMENU)IDC_CHECK_FILTROTHRES, hIntancePIAD, NULL);
+			CreateWindow("BUTTON", "", WS_VISIBLE | WS_CHILD | WS_TABSTOP | BS_BITMAP, (ancho/2)-134, 520, 57, 57, ghDialog, (HMENU)IDC_BUTTON_TAKEPHOTO, hIntancePIAD, NULL);
+			CreateWindow("BUTTON", "", WS_VISIBLE | WS_CHILD | WS_TABSTOP | BS_BITMAP, (ancho / 2) - 67, 520, 57, 57, ghDialog, (HMENU)IDC_BUTTON_PLAYVIDEO, hIntancePIAD, NULL);
+			CreateWindow("BUTTON", "", WS_VISIBLE | WS_CHILD | WS_TABSTOP | BS_BITMAP, (ancho / 2) , 520, 57, 57, ghDialog, (HMENU)IDC_BUTTON_STOPVIDEO, hIntancePIAD, NULL);
+			CreateWindow("BUTTON", "", WS_VISIBLE | WS_CHILD | WS_TABSTOP | BS_BITMAP, (ancho / 2) + 67, 520, 57, 57, ghDialog, (HMENU)IDC_BUTTON_RECORDVIDEO, hIntancePIAD, NULL);
+			CreateWindow("BUTTON", "Gausiano", WS_VISIBLE | WS_CHILD | BS_CHECKBOX | BS_AUTOCHECKBOX, (ancho / 2) + 450, 10, 80, 10, ghDialog, (HMENU)IDC_CHECK_FILTROGAUS, hIntancePIAD, NULL);
+			CreateWindow("BUTTON", "Media Blur", WS_VISIBLE | WS_CHILD | BS_CHECKBOX | BS_AUTOCHECKBOX, (ancho / 2) + 450, 30, 130, 15, ghDialog, (HMENU)IDC_CHECK_FILTROMEDIA, hIntancePIAD, NULL);
+			CreateWindow("BUTTON", "Media Pond. Blur", WS_VISIBLE | WS_CHILD | BS_CHECKBOX | BS_AUTOCHECKBOX, (ancho / 2) + 450, 50, 130, 15, ghDialog, (HMENU)IDC_CHECK_FILTROMEDIAP, hIntancePIAD, NULL);
+			CreateWindow("BUTTON", "Sustrac. Media", WS_VISIBLE | WS_CHILD | BS_CHECKBOX | BS_AUTOCHECKBOX, (ancho / 2) + 450, 70, 130, 15, ghDialog, (HMENU)IDC_CHECK_FILTROSUBMEDIA, hIntancePIAD, NULL);
+			CreateWindow("BUTTON", "Laplaciano", WS_VISIBLE | WS_CHILD | BS_CHECKBOX | BS_AUTOCHECKBOX, (ancho / 2) + 450, 90, 130, 15, ghDialog, (HMENU)IDC_CHECK_FILTROLAPLACIAN, hIntancePIAD, NULL);
+			CreateWindow("BUTTON", "Menos Laplaciano", WS_VISIBLE | WS_CHILD | BS_CHECKBOX | BS_AUTOCHECKBOX, (ancho / 2) + 450, 110, 130, 15, ghDialog, (HMENU)IDC_CHECK_FILTROALAPLACIAN, hIntancePIAD, NULL);
+			CreateWindow("BUTTON", "Norte", WS_VISIBLE | WS_CHILD | BS_CHECKBOX | BS_AUTOCHECKBOX, (ancho / 2) +450, 130, 130, 15, ghDialog, (HMENU)IDC_CHECK_FILTRONORTH, hIntancePIAD, NULL);
+			CreateWindow("BUTTON", "Este", WS_VISIBLE | WS_CHILD | BS_CHECKBOX | BS_AUTOCHECKBOX, (ancho / 2) + 450, 150, 130, 15, ghDialog, (HMENU)IDC_CHECK_FILTROEAST, hIntancePIAD, NULL);
+			CreateWindow("BUTTON", "C Sobel", WS_VISIBLE | WS_CHILD | BS_CHECKBOX | BS_AUTOCHECKBOX, (ancho / 2) + 450, 170, 130, 15, ghDialog, (HMENU)IDC_CHECK_FILTROCSOBEL, hIntancePIAD, NULL);
+			CreateWindow("BUTTON", "F Sobel", WS_VISIBLE | WS_CHILD | BS_CHECKBOX | BS_AUTOCHECKBOX, (ancho / 2) + 450, 190, 130, 15, ghDialog, (HMENU)IDC_CHECK_FILTROFSOBEL, hIntancePIAD, NULL);
+			CreateWindow("BUTTON", "Blanco y Negro", WS_VISIBLE | WS_CHILD | BS_CHECKBOX | BS_AUTOCHECKBOX, (ancho / 2) + 450, 210, 130, 15, ghDialog, (HMENU)IDC_CHECK_FILTROGRAY, hIntancePIAD, NULL);
+			CreateWindow("BUTTON", "Threshold", WS_VISIBLE | WS_CHILD | BS_CHECKBOX | BS_AUTOCHECKBOX, (ancho / 2) + 450, 230, 130, 15, ghDialog, (HMENU)IDC_CHECK_FILTROTHRES, hIntancePIAD, NULL);
 
 			hButtonPhotoMode = GetDlgItem(ghDialog, IDC_BUTTON_PHOTOMODE);
 			hButtonVideoMode = GetDlgItem(ghDialog, IDC_BUTTON_VIDEOMODE);
@@ -157,7 +157,7 @@ LRESULT CALLBACK EditDlgProc(HWND ghDialog, UINT mensaje, WPARAM wParam, LPARAM 
 				}
 			}
 			file.close();*/
-		}return true;
+		}break;
 
 		case WM_CTLCOLORSTATIC:{
 			if ((HWND)lParam == GetDlgItem(ghDialog, IDC_STATIC_PRINT) )
@@ -265,18 +265,7 @@ LRESULT CALLBACK EditDlgProc(HWND ghDialog, UINT mensaje, WPARAM wParam, LPARAM 
 			}
 
 			
-		}return true;
-
-		case WM_CTLCOLORBTN:{
-			/*if ((HWND)lParam == hButtonGenerar)
-			{
-				SetBkMode((HDC)wParam, TRANSPARENT);
-				SetTextColor((HDC)wParam, RGB(255, 255, 255));
-				SetBkColor((HDC)wParam, RGB(30, 30, 30));
-				hbrBkgnd = CreateSolidBrush(RGB(30, 30, 30));
-				return (INT_PTR)hbrBkgnd;
-			}		*/	
-		}return true;
+		}break;
 
 		case WM_COMMAND: {
 			switch (LOWORD(wParam))
@@ -287,169 +276,7 @@ LRESULT CALLBACK EditDlgProc(HWND ghDialog, UINT mensaje, WPARAM wParam, LPARAM 
 					alto = GetSystemMetrics(SM_CYSCREEN);
 					alto = GetSystemMetrics(SM_CYSCREEN);
 					centerElementX(hDisplay);
-				}return true;
-
-				case WM_ERASEBKGND: {
-
-				}return true;
-
-				case IDC_BUTTON_GENERAR:{
-					
-					//imshow("ventana", obturador);
-					calcularTamañoIdeal(imgPrueba.size());
-					Mat imagePruebaR;
-					resize(imgPrueba, imagePruebaR, imagePruebaR.size(), escalaX, escalaY, INTER_AREA);
-					
-					start = (double)getTickCount();
-
-					for (int i = 0; i < contador; i++){
-						if (orden[i] > 0){
-							switch (orden[i])
-							{
-								case MEDIA:{
-									filtros::ApliMask(imagePruebaR, dstPrueba, 3, 3, media_mask);
-									dstPrueba.copyTo(imagePruebaR);
-								}break;
-								
-								case LAPLACIAN:{
-									filtros::ApliMask(imagePruebaR, dstPrueba, 3, 3, laplacian_mask, LAPLACIAN);
-									dstPrueba.copyTo(imagePruebaR);
-								}break;
-
-								case SUB_MEDIA:{
-									filtros::ApliMask(imagePruebaR, dstPrueba, 3, 3, subsMedia_mask, SUB_MEDIA);
-									dstPrueba.copyTo(imagePruebaR);
-								}break;
-
-								case ALAPLACIAN:{
-									filtros::ApliMask(imagePruebaR, dstPrueba, 3, 3, alaplacian_mask, ALAPLACIAN);
-									dstPrueba.copyTo(imagePruebaR);
-								}break;
-
-								case GAUSIAN:{
-									filtros::ApliMask(imagePruebaR, dstPrueba, 3, 3, gausian_mask);
-									dstPrueba.copyTo(imagePruebaR);
-								}break;
-
-								case MEDIA_POND:{
-									filtros::ApliMask(imagePruebaR, dstPrueba, 3, 3, mediaPondered_mask);
-									dstPrueba.copyTo(imagePruebaR);
-								}break;
-
-								case NORTH:{
-									filtros::ApliMask(imagePruebaR, dstPrueba, 3, 3, nort_mask, ALAPLACIAN);
-									dstPrueba.copyTo(imagePruebaR);
-								}break;
-
-								case EAST:{
-									filtros::ApliMask(imagePruebaR, dstPrueba, 3, 3, east_mask, ALAPLACIAN);
-									dstPrueba.copyTo(imagePruebaR);
-								}break;
-
-								case CSOBEL:{
-									filtros::ApliMask(imagePruebaR, dstPrueba, 3, 3, cSobel_mask, LAPLACIAN);
-									dstPrueba.copyTo(imagePruebaR);
-								}break;
-
-								case FSOBEL:{
-									filtros::ApliMask(imagePruebaR, dstPrueba, 3, 3, fSobel_mask, LAPLACIAN);
-									dstPrueba.copyTo(imagePruebaR);
-								}break;
-								
-								case GRAY:{
-									filtros::toGray(imagePruebaR, dstPrueba);
-									dstPrueba.copyTo(imagePruebaR);
-								}break;
-								
-								case THRESH:{
-									filtros::threshold(imagePruebaR, dstPrueba, 198, 197);
-									dstPrueba.copyTo(imagePruebaR);
-								}break;
-							}
-						}
-						
-					}
-					
-					/*if (checkedFiltroGaus){
-						filtros::ApliMask(imagePruebaR, dstPrueba, 3, 3, gausian_mask);
-						dstPrueba.copyTo(imagePruebaR);
-					}*/
-				/*	if (checkedFiltroMedia){
-						filtros::ApliMask(imagePruebaR, dstPrueba, 3, 3, media_mask);
-						dstPrueba.copyTo(imagePruebaR);
-					}*/
-					/*if (checkedFiltroMediaP){
-						filtros::ApliMask(imagePruebaR, dstPrueba, 3, 3, mediaPondered_mask);
-						dstPrueba.copyTo(imagePruebaR);
-					}*/
-					/*if (checkedFiltroSubMedia || checkedFiltroLaplacian || checkedFiltroALaplacian || checkedFiltroNorth || checkedFiltroEast || checkedFiltroCSobel || checkedFiltroFSobel){
-						filtros::toGray(imagePruebaR, dstPrueba);
-						dstPrueba.copyTo(imagePruebaR);
-					}*/
-					/*if (checkedFiltroThreshold){
-						filtros::threshold(imagePruebaR, dstPrueba, 198, 197);
-						dstPrueba.copyTo(imagePruebaR);
-
-					}*/
-					/*if (checkedFiltroSubMedia){
-						
-						filtros::ApliMask(imagePruebaR, dstPrueba, 3, 3, subsMedia_mask,SUB_MEDIA);
-						Mat mul = dstPrueba.mul(imagePruebaR);
-						mul.copyTo(imagePruebaR);
-					}*/
-					/*if (checkedFiltroLaplacian){
-						
-						filtros::ApliMask(imagePruebaR, dstPrueba, 3, 3, laplacian_mask, LAPLACIAN);
-						Mat mul = dstPrueba.mul(imagePruebaR);
-						mul.copyTo(imagePruebaR);
-					}*/
-					/*if (checkedFiltroALaplacian){
-						
-						filtros::ApliMask(imagePruebaR, dstPrueba, 3, 3, alaplacian_mask, ALAPLACIAN);
-						Mat mul = dstPrueba.mul(imagePruebaR);
-						mul.copyTo(imagePruebaR);
-					}*/
-					/*if (checkedFiltroNorth){
-						
-						filtros::ApliMask(imagePruebaR, dstPrueba, 3, 3, nort_mask, ALAPLACIAN);
-						Mat mul = dstPrueba.mul(imagePruebaR);
-						mul.copyTo(imagePruebaR);
-					}*/
-					/*if (checkedFiltroEast){
-						
-						filtros::ApliMask(imagePruebaR, dstPrueba, 3, 3, east_mask, ALAPLACIAN);
-						Mat mul = dstPrueba.mul(imagePruebaR);
-						mul.copyTo(imagePruebaR);
-						
-					}*/
-					/*if (checkedFiltroCSobel){
-						
-						filtros::ApliMask(imagePruebaR, dstPrueba, 3, 3, cSobel_mask, LAPLACIAN);
-						Mat mul = dstPrueba.mul(imagePruebaR);
-						mul.copyTo(imagePruebaR);
-					}
-					if (checkedFiltroFSobel){
-						
-						filtros::ApliMask(imagePruebaR, dstPrueba, 3, 3, fSobel_mask, LAPLACIAN);
-						Mat mul = dstPrueba.mul(imagePruebaR);
-						mul.copyTo(imagePruebaR);
-					}*/
-					/*if (checkedFiltroGray){
-						filtros::toGray(imagePruebaR, dstPrueba);
-						dstPrueba.copyTo(imagePruebaR);
-						
-					}*/
-					
-					 elapsed = 0;
-					elapsed = ((double)getTickCount() - start) / getTickFrequency();
-					
-					sprintf_s(text, "%f", elapsed);
-					
-					SendDlgItemMessage(ghDialog, IDC_STATIC_PRINT, WM_SETTEXT, 0, (LPARAM)text);
-					HBITMAP image = ConvertCVMatToBMP(dstPrueba);
-					SendDlgItemMessage(ghDialog, IDC_DISPLAY, STM_SETIMAGE, IMAGE_BITMAP, (LPARAM)image);
-
-				}return true;
+				}break;
 
 				case IDC_BUTTON_PHOTOMODE:{
 					SendDlgItemMessage(ghDialog, IDC_STATIC_PRINT, WM_SETTEXT, 0, (LPARAM)"");
@@ -457,13 +284,13 @@ LRESULT CALLBACK EditDlgProc(HWND ghDialog, UINT mensaje, WPARAM wParam, LPARAM 
 					SendDlgItemMessage(ghDialog, IDC_STATIC_PRINT, WM_SETTEXT, 0, (LPARAM)"Jala photo mode");
 					mostrarControlesPhotoMode();
 					ocultarControlesVideoMode();
-				}return true;
+				}break;
 
 				case IDC_BUTTON_VIDEOMODE:{
 					SendDlgItemMessage(ghDialog, IDC_STATIC_PRINT, WM_SETTEXT, 0, (LPARAM)"Jala video mode");
 					ocultarControlesPhotoMode();
 					mostrarControlesVideoMode();
-				}return true;
+				}break;
 
 				case IDC_BUTTON_PLAYVIDEO:{
 					if (!captureVideo){
@@ -477,7 +304,7 @@ LRESULT CALLBACK EditDlgProc(HWND ghDialog, UINT mensaje, WPARAM wParam, LPARAM 
 
 						
 					}
-				}return true;
+				}break;
 
 				case IDC_BUTTON_STOPVIDEO:{
 					if (captureVideo){
@@ -485,13 +312,14 @@ LRESULT CALLBACK EditDlgProc(HWND ghDialog, UINT mensaje, WPARAM wParam, LPARAM 
 						takeVideo = false;
 						
 						if (takeVideo){
+						
 							wrt->release();
 							wrt->~VideoWriter();
 						}
 						
 						
 					}
-				}return true;
+				}break;
 
 				case IDC_BUTTON_TAKEPHOTO:{
 					if (!takeVideo){
@@ -499,7 +327,7 @@ LRESULT CALLBACK EditDlgProc(HWND ghDialog, UINT mensaje, WPARAM wParam, LPARAM 
 						takePhoto = true;
 
 					}
-				}return true;
+				}break;
 
 				case IDC_BUTTON_RECORDVIDEO:{
 					time_t t = time(0);
@@ -534,7 +362,7 @@ LRESULT CALLBACK EditDlgProc(HWND ghDialog, UINT mensaje, WPARAM wParam, LPARAM 
 						wrt = new VideoWriter(nameVideo, CV_FOURCC('M', 'J', 'P', 'G'), 24, Size(400, 400));
 						takeVideo = true;
 					}
-				}return true;
+				}break;
 
 				//CHECKS--------------------------------------------------------------------
 				case IDC_CHECK_FILTROGAUS:{
@@ -544,12 +372,12 @@ LRESULT CALLBACK EditDlgProc(HWND ghDialog, UINT mensaje, WPARAM wParam, LPARAM 
 							orden[contador] = GAUSIAN;
 							contador++;
 						}
-					}
-					else{
+					}else{
 						deleteFiltro(GAUSIAN);
 						contador--;
 					}
-				}return true;
+				}break;
+
 				case IDC_CHECK_FILTROMEDIA:{
 					checkedFiltroMedia = SendDlgItemMessage(ghDialog, IDC_CHECK_FILTROMEDIA, BM_GETCHECK, 0, 0);
 					if (checkedFiltroMedia){
@@ -557,12 +385,12 @@ LRESULT CALLBACK EditDlgProc(HWND ghDialog, UINT mensaje, WPARAM wParam, LPARAM 
 							orden[contador] = MEDIA;
 							contador++;
 						}
-					}
-					else{
+					}else{
 						deleteFiltro(MEDIA);
 						contador--;
 					}
-				}return true;
+				}break;
+
 				case IDC_CHECK_FILTROMEDIAP:{
 					checkedFiltroMediaP = SendDlgItemMessage(ghDialog, IDC_CHECK_FILTROMEDIAP, BM_GETCHECK, 0, 0);
 					if (checkedFiltroMediaP){
@@ -570,12 +398,12 @@ LRESULT CALLBACK EditDlgProc(HWND ghDialog, UINT mensaje, WPARAM wParam, LPARAM 
 							orden[contador] = MEDIA_POND;
 							contador++;
 						}
-					}
-					else{
+					}else{
 						deleteFiltro(MEDIA_POND);
 						contador--;
 					}
-				}return true;
+				}break;
+
 				case IDC_CHECK_FILTROSUBMEDIA:{
 					checkedFiltroSubMedia = SendDlgItemMessage(ghDialog, IDC_CHECK_FILTROSUBMEDIA, BM_GETCHECK, 0, 0);
 					if (checkedFiltroSubMedia){
@@ -583,12 +411,12 @@ LRESULT CALLBACK EditDlgProc(HWND ghDialog, UINT mensaje, WPARAM wParam, LPARAM 
 							orden[contador] = SUB_MEDIA;
 							contador++;
 						}
-					}
-					else{
+					}else{
 						deleteFiltro(SUB_MEDIA);
 						contador--;
 					}
-				}return true;
+				}break;
+
 				case IDC_CHECK_FILTROLAPLACIAN:{
 					checkedFiltroLaplacian = SendDlgItemMessage(ghDialog, IDC_CHECK_FILTROLAPLACIAN, BM_GETCHECK, 0, 0);
 					if (checkedFiltroLaplacian){
@@ -596,12 +424,12 @@ LRESULT CALLBACK EditDlgProc(HWND ghDialog, UINT mensaje, WPARAM wParam, LPARAM 
 							orden[contador] = LAPLACIAN;
 							contador++;
 						}
-					}
-					else{
+					}else{
 						deleteFiltro(LAPLACIAN);
 						contador--;
 					}
-				}return true;
+				}break;
+
 				case IDC_CHECK_FILTROALAPLACIAN:{
 					checkedFiltroALaplacian = SendDlgItemMessage(ghDialog, IDC_CHECK_FILTROALAPLACIAN, BM_GETCHECK, 0, 0);
 					if (checkedFiltroALaplacian){
@@ -609,12 +437,12 @@ LRESULT CALLBACK EditDlgProc(HWND ghDialog, UINT mensaje, WPARAM wParam, LPARAM 
 							orden[contador] = ALAPLACIAN;
 							contador++;
 						}
-					}
-					else{
+					}else{
 						deleteFiltro(ALAPLACIAN);
 						contador--;
 					}
-				}return true;
+				}break;
+
 				case IDC_CHECK_FILTRONORTH:{
 					checkedFiltroNorth = SendDlgItemMessage(ghDialog, IDC_CHECK_FILTRONORTH, BM_GETCHECK, 0, 0);
 					if (checkedFiltroNorth){
@@ -622,12 +450,12 @@ LRESULT CALLBACK EditDlgProc(HWND ghDialog, UINT mensaje, WPARAM wParam, LPARAM 
 							orden[contador] = NORTH;
 							contador++;
 						}
-					}
-					else{
+					}else{
 						deleteFiltro(NORTH);
 						contador--;
 					}
-				}return true;
+				}break;
+
 				case IDC_CHECK_FILTROEAST:{
 					checkedFiltroEast = SendDlgItemMessage(ghDialog, IDC_CHECK_FILTROEAST, BM_GETCHECK, 0, 0);
 					if (checkedFiltroEast){
@@ -635,12 +463,12 @@ LRESULT CALLBACK EditDlgProc(HWND ghDialog, UINT mensaje, WPARAM wParam, LPARAM 
 							orden[contador] = EAST;
 							contador++;
 						}
-					}
-					else{
+					}else{
 						deleteFiltro(EAST);
 						contador--;
 					}
-				}return true;
+				}break;
+
 				case IDC_CHECK_FILTROCSOBEL:{
 					checkedFiltroCSobel = SendDlgItemMessage(ghDialog, IDC_CHECK_FILTROCSOBEL, BM_GETCHECK, 0, 0);
 					if (checkedFiltroCSobel){
@@ -648,12 +476,12 @@ LRESULT CALLBACK EditDlgProc(HWND ghDialog, UINT mensaje, WPARAM wParam, LPARAM 
 							orden[contador] = CSOBEL;
 							contador++;
 						}
-					}
-					else{
+					}else{
 						deleteFiltro(CSOBEL);
 						contador--;
 					}
-				}return true;
+				}break;
+
 				case IDC_CHECK_FILTROFSOBEL:{
 					checkedFiltroFSobel = SendDlgItemMessage(ghDialog, IDC_CHECK_FILTROFSOBEL, BM_GETCHECK, 0, 0);
 					if (checkedFiltroFSobel){
@@ -666,7 +494,7 @@ LRESULT CALLBACK EditDlgProc(HWND ghDialog, UINT mensaje, WPARAM wParam, LPARAM 
 						deleteFiltro(FSOBEL);
 						contador--;
 					}
-				}return true;
+				}break;
 				case IDC_CHECK_FILTROGRAY:{
 					checkedFiltroGray = SendDlgItemMessage(ghDialog, IDC_CHECK_FILTROGRAY, BM_GETCHECK, 0, 0);
 					if (checkedFiltroGray){
@@ -674,47 +502,48 @@ LRESULT CALLBACK EditDlgProc(HWND ghDialog, UINT mensaje, WPARAM wParam, LPARAM 
 							orden[contador] = GRAY;
 							contador++;
 						}
-					}
-					else{
+					}else{
 						deleteFiltro(GRAY);
 						contador--;
 					}
-				}return true;
+				}break;
+
 				case IDC_CHECK_FILTROTHRES:{
 					checkedFiltroThreshold = SendDlgItemMessage(ghDialog, IDC_CHECK_FILTROTHRES, BM_GETCHECK, 0, 0);
 					if (checkedFiltroThreshold){
 						if (contador < 4){
 							orden[contador] = THRESH;
 							contador++;
+					
+							
 						}
-					}
-					else{
+					}else{
 						deleteFiltro(THRESH);
 						contador--;
 					}
-				}return true;
+				}break;
 
 			}
-		}return true;
+		}break;
 
 		case WM_CLOSE: {
 			EndDialog(
 				ghDialog, // Handle to dialog to end.
 				0);
 			
-		}return true;
+		}break;
 		case WM_DESTROY: {
 			EndDialog(
 				ghDialog, // Handle to dialog to end.
 				0);
 			DestroyWindow(ghDialog);
-		}return true;
+		}break;
 		case WM_SIZING:{
 			ancho = GetSystemMetrics(SM_CXSCREEN);
 			alto = GetSystemMetrics(SM_CYSCREEN);
 			alto = GetSystemMetrics(SM_CYSCREEN);
 			centerElementX(hDisplay);
-		}return true;
+		}break;
 	}
 
 	return false;
