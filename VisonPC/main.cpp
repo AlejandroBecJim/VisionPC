@@ -87,8 +87,8 @@ LRESULT CALLBACK EditDlgProc(HWND ghDialog, UINT mensaje, WPARAM wParam, LPARAM 
 			CreateWindow("BUTTON", "Menos Laplaciano", WS_VISIBLE | WS_CHILD | BS_CHECKBOX | BS_AUTOCHECKBOX, (ancho / 2) + 330, 110, 130, 15, ghDialog, (HMENU)IDC_CHECK_FILTROALAPLACIAN, hIntancePIAD, NULL);
 			CreateWindow("BUTTON", "Norte", WS_VISIBLE | WS_CHILD | BS_CHECKBOX | BS_AUTOCHECKBOX, (ancho / 2) +330, 130, 130, 15, ghDialog, (HMENU)IDC_CHECK_FILTRONORTH, hIntancePIAD, NULL);
 			CreateWindow("BUTTON", "Este", WS_VISIBLE | WS_CHILD | BS_CHECKBOX | BS_AUTOCHECKBOX, (ancho / 2) + 330, 150, 130, 15, ghDialog, (HMENU)IDC_CHECK_FILTROEAST, hIntancePIAD, NULL);
-			CreateWindow("BUTTON", "C Sobel", WS_VISIBLE | WS_CHILD | BS_CHECKBOX | BS_AUTOCHECKBOX, (ancho / 2) + 330, 170, 130, 15, ghDialog, (HMENU)IDC_CHECK_FILTROCSOBEL, hIntancePIAD, NULL);
-			CreateWindow("BUTTON", "F Sobel", WS_VISIBLE | WS_CHILD | BS_CHECKBOX | BS_AUTOCHECKBOX, (ancho / 2) + 330, 190, 130, 15, ghDialog, (HMENU)IDC_CHECK_FILTROFSOBEL, hIntancePIAD, NULL);
+			CreateWindow("BUTTON", "Sobel", WS_VISIBLE | WS_CHILD | BS_CHECKBOX | BS_AUTOCHECKBOX, (ancho / 2) + 330, 170, 130, 15, ghDialog, (HMENU)IDC_CHECK_FILTROCSOBEL, hIntancePIAD, NULL);
+			CreateWindow("BUTTON", "Scharr", WS_VISIBLE | WS_CHILD | BS_CHECKBOX | BS_AUTOCHECKBOX, (ancho / 2) + 330, 190, 130, 15, ghDialog, (HMENU)IDC_CHECK_FILTROSCHARR, hIntancePIAD, NULL);
 			CreateWindow("BUTTON", "Blanco y Negro", WS_VISIBLE | WS_CHILD | BS_CHECKBOX | BS_AUTOCHECKBOX, (ancho / 2) + 330, 210, 130, 15, ghDialog, (HMENU)IDC_CHECK_FILTROGRAY, hIntancePIAD, NULL);
 			CreateWindow("BUTTON", "Threshold", WS_VISIBLE | WS_CHILD | BS_CHECKBOX | BS_AUTOCHECKBOX, (ancho / 2) + 330, 230, 130, 15, ghDialog, (HMENU)IDC_CHECK_FILTROTHRES, hIntancePIAD, NULL);
 			CreateWindow("BUTTON", "Ecualización Hist. Normal", WS_VISIBLE | WS_CHILD | BS_CHECKBOX | BS_AUTOCHECKBOX, (ancho / 2) + 330, 250, 200, 15, ghDialog, (HMENU)IDC_CHECK_FILTRONORMALHISTOGRAM, hIntancePIAD, NULL);
@@ -110,7 +110,7 @@ LRESULT CALLBACK EditDlgProc(HWND ghDialog, UINT mensaje, WPARAM wParam, LPARAM 
 			hCheckFiltroNorth = GetDlgItem(ghDialog, IDC_CHECK_FILTRONORTH);
 			hCheckFiltroEast = GetDlgItem(ghDialog, IDC_CHECK_FILTROEAST);
 			hCheckFiltroCSobel = GetDlgItem(ghDialog, IDC_CHECK_FILTROCSOBEL);
-			hCheckFiltroFSobel = GetDlgItem(ghDialog, IDC_CHECK_FILTROFSOBEL);
+			hCheckFiltroScharr = GetDlgItem(ghDialog, IDC_CHECK_FILTROSCHARR);
 			hCheckFiltroGray = GetDlgItem(ghDialog, IDC_CHECK_FILTROGRAY);
 			hCheckFiltroThreshold = GetDlgItem(ghDialog, IDC_CHECK_FILTROTHRES);
 			hCheckFiltroHitogramNormal = GetDlgItem(ghDialog, IDC_CHECK_FILTRONORMALHISTOGRAM);
@@ -145,7 +145,7 @@ LRESULT CALLBACK EditDlgProc(HWND ghDialog, UINT mensaje, WPARAM wParam, LPARAM 
 			
 			filtros f;
 			
-			gausian_mask = filtros::GenerateGausianMask(3, 3, 9);
+			gausian_mask = filtros::GenerateGausianMask(3, 3, sigma);
 			filtros::GenerateSubMediaMask(3,3);
 			filtros::GenerateMediaMask(3,3);
 			filtros::GenerateLaplacianMask();
@@ -154,7 +154,9 @@ LRESULT CALLBACK EditDlgProc(HWND ghDialog, UINT mensaje, WPARAM wParam, LPARAM 
 			filtros::GenerateEastMask();
 			filtros::GenerateCSobelMask();
 			filtros::GenerateFSobelMask();
-			filtros::GenerateMediaPMask(3, 3, 4);
+			filtros::GenerateScharrMaskX();
+			filtros::GenerateScharrMaskY();
+			filtros::GenerateMediaPMask(3, 3, pondered);
 			/*std::ofstream file;
 			file.open("cout.txt");
 			
@@ -249,7 +251,7 @@ LRESULT CALLBACK EditDlgProc(HWND ghDialog, UINT mensaje, WPARAM wParam, LPARAM 
 				hbrBkgnd = CreateSolidBrush(RGB(30, 30, 30));
 				return (INT_PTR)hbrBkgnd;
 			}
-			if ((HWND)lParam == GetDlgItem(ghDialog, IDC_CHECK_FILTROFSOBEL))
+			if ((HWND)lParam == GetDlgItem(ghDialog, IDC_CHECK_FILTROSCHARR))
 			{
 				SetBkMode((HDC)wParam, TRANSPARENT);
 				SetTextColor((HDC)wParam, RGB(255, 255, 255));
@@ -308,7 +310,10 @@ LRESULT CALLBACK EditDlgProc(HWND ghDialog, UINT mensaje, WPARAM wParam, LPARAM 
 		case WM_COMMAND: {
 			switch (LOWORD(wParam))
 			{	
-				
+				case ID_ARCHIVO_CONFIGURACION:{
+					DialogBox(hInstanceCONFIG, MAKEINTRESOURCE(IDD_CONFIG), ghConfig, ConfigDlgProc);
+
+				}break;
 				case WM_DISPLAYCHANGE:{
 					ancho = GetSystemMetrics(SM_CXSCREEN);
 					alto = GetSystemMetrics(SM_CYSCREEN);
@@ -513,25 +518,25 @@ LRESULT CALLBACK EditDlgProc(HWND ghDialog, UINT mensaje, WPARAM wParam, LPARAM 
 					checkedFiltroCSobel = SendDlgItemMessage(ghDialog, IDC_CHECK_FILTROCSOBEL, BM_GETCHECK, 0, 0);
 					if (checkedFiltroCSobel){
 						if (contador < 4){
-							orden[contador] = CSOBEL;
+							orden[contador] = SOBEL;
 							contador++;
 						}
 					}else{
-						deleteFiltro(CSOBEL);
+						deleteFiltro(SOBEL);
 						contador--;
 					}
 				}break;
 
-				case IDC_CHECK_FILTROFSOBEL:{
-					checkedFiltroFSobel = SendDlgItemMessage(ghDialog, IDC_CHECK_FILTROFSOBEL, BM_GETCHECK, 0, 0);
-					if (checkedFiltroFSobel){
+				case IDC_CHECK_FILTROSCHARR:{
+					checkedFiltroScharr = SendDlgItemMessage(ghDialog, IDC_CHECK_FILTROSCHARR, BM_GETCHECK, 0, 0);
+					if (checkedFiltroScharr){
 						if (contador < 4){
-							orden[contador] = FSOBEL;
+							orden[contador] = SCHARR;
 							contador++;
 						}
 					}
 					else{
-						deleteFiltro(FSOBEL);
+						deleteFiltro(SCHARR);
 						contador--;
 					}
 				}break;
@@ -639,4 +644,45 @@ LRESULT CALLBACK EditDlgProc(HWND ghDialog, UINT mensaje, WPARAM wParam, LPARAM 
 	return false;
 }
 
+LRESULT CALLBACK ConfigDlgProc(HWND chDialog, UINT mensaje1, WPARAM wParam1, LPARAM lParam1){
+	
+	switch (mensaje1)
+	{
+		case WM_INITDIALOG:
+		{
+			hEditPath = GetDlgItem(chDialog, IDC_EDIT_PATH);
+			hButtonAceptarPath = GetDlgItem(chDialog, IDC_BUTTON_GUARDAR_RUTA);
+			hButtonCancelPath = GetDlgItem(chDialog, IDC_BUTTON_CANCELAR_RUTA);
+			hButtonExaminarPath = GetDlgItem(chDialog, IDC_BUTTON_EXAMINAR);
+
+		}break;
+		case WM_COMMAND:{
+			switch (LOWORD(wParam1)){
+				case IDC_BUTTON_EXAMINAR:{
+					char *argv[MAX_PATH];
+					
+					string path = BrowseFolder(argv[1]);
+					
+					char path_c[MAX_PATH];
+					strcpy(path_c, path.c_str());
+					SetDlgItemText(chDialog, IDC_EDIT_PATH, (LPCSTR)path_c);
+
+				}break;
+			}
+		}break;
+		
+		case WM_CLOSE:
+			EndDialog(
+				chDialog, // Handle to dialog to end.
+				0);
+			return true;
+		case WM_DESTROY:
+			EndDialog(
+				chDialog, // Handle to dialog to end.
+				0);
+			return true;
+	}
+
+	return false;
+}
 
