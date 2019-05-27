@@ -14,6 +14,9 @@
 #include <cmath>
 #include <math.h>
 #include <thread> 
+#include <sstream>
+#include <string>
+#include <shlobj.h>
 #include "resource.h"
 using namespace std;
 using namespace cv;
@@ -29,8 +32,8 @@ using namespace cv;
 #define MEDIA_POND					505
 #define NORTH						506
 #define EAST						507
-#define CSOBEL						508
-#define FSOBEL						509
+#define SOBEL						508
+#define SCHARR						509
 #define GRAY						510
 #define THRESH						512
 #define SIMPLE_HITOGRAM				513
@@ -67,6 +70,8 @@ int **nort_mask;
 int **east_mask;
 int **cSobel_mask;
 int **fSobel_mask;
+int **scharrX_mask;
+int **scharrY_mask;
 int *histogramR;
 int *histogramG;
 int *histogramB;
@@ -109,7 +114,7 @@ bool checkedFiltroALaplacian = false;
 bool checkedFiltroNorth = false;
 bool checkedFiltroEast = false;
 bool checkedFiltroCSobel = false;
-bool checkedFiltroFSobel = false;
+bool checkedFiltroScharr = false;
 bool checkedFiltroGray = false;
 bool checkedFiltroThreshold = false;
 bool checkedFiltroHistogramSimple = false;
@@ -117,11 +122,16 @@ bool checkedFiltroHistogramExponencial = false;
 bool checkedFiltroHistogramUniforme = false;
 
 float alfa = 0.01;
+float sigma = 6;
+int pondered = 4;
+int anchoGausian = 3, altoGausian = 3, anchoSubM = 3, altoSubm = 3, anchoMedia = 3, altoMedia = 3, anchoMediaP = 3, altoMediaP = 3;
 #pragma endregion
 
 #pragma region VARIABLES DE VENTANAS
 HWND ghPIAD = 0;
 HINSTANCE hIntancePIAD = 0;
+HWND ghConfig = 0;
+HINSTANCE hInstanceCONFIG = 0;
 #pragma endregion
 
 #pragma region VARIABLES DE CONTROLES-ghPIAD
@@ -145,7 +155,7 @@ static HWND hCheckFiltroALaplacian = 0;
 static HWND hCheckFiltroNorth = 0;
 static HWND hCheckFiltroEast = 0;
 static HWND hCheckFiltroCSobel = 0;
-static HWND hCheckFiltroFSobel = 0;
+static HWND hCheckFiltroScharr = 0;
 static HWND hCheckFiltroGray = 0;
 static HWND hCheckFiltroThreshold = 0;
 static HWND hCheckFiltroHitogramNormal = 0;
@@ -154,6 +164,13 @@ static HWND hCheckFiltroHistogramUniform = 0;
 
 
 
+#pragma endregion
+
+#pragma region VARIABLES DE CONTROLES-ghCONFIG
+static HWND hEditPath = 0;
+static HWND hButtonExaminarPath = 0;
+static HWND hButtonAceptarPath = 0;
+static HWND hButtonCancelPath = 0;
 #pragma endregion
 
 #pragma region VARIABLES IMAGE VIDEO
@@ -186,6 +203,7 @@ uchar** GenerateGausianMask(int x,int y, float sigma);
 uchar** GenerateMediaMask(int x,int y);
 uchar** GenerateMediaPonderedMask(int x, int y,int p);
 uchar** GenerateSubMediaMask(int x, int y);
+
 void ApliMask(Mat& src,Mat& dst,int x,int y,uchar** mask);
 #pragma endregion
 
@@ -195,6 +213,8 @@ HICON mainicon;
 
 #pragma region PROTOTIPOS DE CALLBACKS
 LRESULT CALLBACK EditDlgProc(HWND ghDialog, UINT mensaje, WPARAM wParam, LPARAM lParam);
+LRESULT CALLBACK ConfigDlgProc(HWND chDialog, UINT mensaje1, WPARAM wParam1, LPARAM lParam1);
+
 #pragma endregion
 
 
@@ -524,9 +544,43 @@ public:
 		fSobel_mask[2][2] = 1;
 	}
 
-	
+	static void GenerateScharrMaskX(){
+		scharrX_mask = new int*[3];
+		for (int i = 0; i < 3; i++)
+			scharrX_mask[i] = new int[3];
 
-	
+
+		scharrX_mask[0][0] = -1;
+		scharrX_mask[0][1] = 0;
+		scharrX_mask[0][2] = 1;
+		
+		scharrX_mask[1][0] = -2;
+		scharrX_mask[1][1] = 0;
+		scharrX_mask[1][2] = 2;
+
+		scharrX_mask[2][0] = -1;
+		scharrX_mask[2][1] = 0;
+		scharrX_mask[2][2] = 1;
+	}
+
+	static void GenerateScharrMaskY(){
+		scharrY_mask = new int*[3];
+		for (int i = 0; i < 3; i++)
+			scharrY_mask[i] = new int[3];
+
+
+		scharrY_mask[0][0] = -1;
+		scharrY_mask[0][1] = -2;
+		scharrY_mask[0][2] = -1;
+		
+		scharrY_mask[1][0] = 0;
+		scharrY_mask[1][1] = 0;
+		scharrY_mask[1][2] = 0;
+		
+		scharrY_mask[2][0] = 1;
+		scharrY_mask[2][1] = 2;
+		scharrY_mask[2][2] = 1;
+	}
 
 	
 
@@ -992,6 +1046,244 @@ public:
 
 	}
 
+	static void ApliSobelMask(Mat& src, Mat& dst, int x, int y, int** mask,int**mask2, int op = 0){
+		float bResultC = 0, gResultC = 0, rResultC = 0;
+		float bResultF = 0, gResultF = 0, rResultF = 0;
+		int xn = (x / 2 != 0) ? x / 2 : 1;
+		int yn = (y / 2 != 0) ? y / 2 : 1;
+		int div = 0;
+		for (int i = 0; i < x; i++) {
+			for (int j = 0; j < y; j++)
+			{
+				div += mask[i][j];
+			}
+		}
+
+		if (op == LAPLACIAN){
+			div = 1;
+		}
+
+		if (op == ALAPLACIAN){
+			div = 1;
+		}
+
+
+		if (op == SUB_MEDIA){
+			div = 9;
+		}
+		
+		for (int r = 0; r < src.rows; r++)
+		{
+			Vec3b* color = src.ptr<Vec3b>(r);
+			Vec3b* grayrow = dst.ptr<Vec3b>(r);
+			for (int c = 0; c < src.cols; c++)
+			{
+
+				for (int i = -xn; i < xn + 1; i++) {
+					for (int j = -yn; j < yn + 1; j++) {
+						if (((c + i) <= src.cols - 1 && (r + j) <= src.rows - 1) && ((c + i) >= 0 && (r + j) >= 0)) {
+							int bC = (color + j)[c + i][0] * mask[i + xn][j + yn];
+							int gC = (color + j)[c + i][1] * mask[i + xn][j + yn];
+							int rC = (color + j)[c + i][2] * mask[i + xn][j + yn];
+							int bF = (color + j)[c + i][0] * mask2[i + xn][j + yn];
+							int gF = (color + j)[c + i][1] * mask2[i + xn][j + yn];
+							int rF = (color + j)[c + i][2] * mask2[i + xn][j + yn];
+							bResultC += (int)bC;
+							gResultC += (int)gC;
+							rResultC += (int)rC;
+							bResultF += (int)bF;
+							gResultF += (int)gF;
+							rResultF += (int)rF;
+						}
+						else {
+							bResultC += 0;
+							gResultC += 0;
+							rResultC += 0;
+							bResultF += 0;
+							gResultF += 0;
+							rResultF += 0;
+						}
+					}
+				}
+
+				bResultC /= div;
+				gResultC /= div;
+				rResultC /= div;
+				bResultF /= div;
+				gResultF /= div;
+				rResultF /= div;
+				if (bResultC > 255) {
+					bResultC = 255;
+				}
+				if (gResultC > 255) {
+					gResultC = 255;
+				}
+				if (rResultC > 255) {
+					rResultC = 255;
+				}
+
+				if (bResultF > 255) {
+					bResultF = 255;
+				}
+				if (gResultF > 255) {
+					gResultF = 255;
+				}
+				if (rResultF > 255) {
+					rResultF = 255;
+				}
+
+				if (bResultC < 0) {
+					bResultC = 0;
+				}
+				if (gResultC < 0) {
+					gResultC = 0;
+				}
+				if (rResultC < 0) {
+					rResultC = 0;
+				}
+
+				if (bResultF < 0) {
+					bResultF = 0;
+				}
+				if (gResultF < 0) {
+					gResultF = 0;
+				}
+				if (rResultF < 0) {
+					rResultF = 0;
+				}
+
+				//Vec3b col(bResult, gResult, rResult);
+
+				grayrow[c][0] = (int)sqrt(pow(bResultC,2) + pow(bResultF,2));
+				grayrow[c][1] = (int)sqrt(pow(gResultC,2) + pow(gResultF,2));
+				grayrow[c][2] = (int)sqrt(pow(rResultC,2) + pow(rResultF,2));
+
+				/*dst.at<Vec3b>(Point(c, r))[0] = bResult;
+				dst.at<Vec3b>(Point(c, r))[1] = gResult;
+				dst.at<Vec3b>(Point(c, r))[2] = rResult;*/
+			}
+		}
+	}
+
+	static void ApliScharrMask(Mat& src, Mat& dst, int x, int y, int** mask, int**mask2, int op = 0){
+		float bResultC = 0, gResultC = 0, rResultC = 0;
+		float bResultF = 0, gResultF = 0, rResultF = 0;
+		int xn = (x / 2 != 0) ? x / 2 : 1;
+		int yn = (y / 2 != 0) ? y / 2 : 1;
+		int div = 0;
+		for (int i = 0; i < x; i++) {
+			for (int j = 0; j < y; j++)
+			{
+				div += mask[i][j];
+			}
+		}
+
+		if (op == LAPLACIAN){
+			div = 1;
+		}
+
+		if (op == ALAPLACIAN){
+			div = 1;
+		}
+
+
+		if (op == SUB_MEDIA){
+			div = 9;
+		}
+
+		for (int r = 0; r < src.rows; r++)
+		{
+			Vec3b* color = src.ptr<Vec3b>(r);
+			Vec3b* grayrow = dst.ptr<Vec3b>(r);
+			for (int c = 0; c < src.cols; c++)
+			{
+
+				for (int i = -xn; i < xn + 1; i++) {
+					for (int j = -yn; j < yn + 1; j++) {
+						if (((c + i) <= src.cols - 1 && (r + j) <= src.rows - 1) && ((c + i) >= 0 && (r + j) >= 0)) {
+							int bC = (color + j)[c + i][0] * mask[i + xn][j + yn];
+							int gC = (color + j)[c + i][1] * mask[i + xn][j + yn];
+							int rC = (color + j)[c + i][2] * mask[i + xn][j + yn];
+							int bF = (color + j)[c + i][0] * mask2[i + xn][j + yn];
+							int gF = (color + j)[c + i][1] * mask2[i + xn][j + yn];
+							int rF = (color + j)[c + i][2] * mask2[i + xn][j + yn];
+							bResultC += (int)bC;
+							gResultC += (int)gC;
+							rResultC += (int)rC;
+							bResultF += (int)bF;
+							gResultF += (int)gF;
+							rResultF += (int)rF;
+						}
+						else {
+							bResultC += 0;
+							gResultC += 0;
+							rResultC += 0;
+							bResultF += 0;
+							gResultF += 0;
+							rResultF += 0;
+						}
+					}
+				}
+
+				bResultC /= div;
+				gResultC /= div;
+				rResultC /= div;
+				bResultF /= div;
+				gResultF /= div;
+				rResultF /= div;
+				if (bResultC > 255) {
+					bResultC = 255;
+				}
+				if (gResultC > 255) {
+					gResultC = 255;
+				}
+				if (rResultC > 255) {
+					rResultC = 255;
+				}
+
+				if (bResultF > 255) {
+					bResultF = 255;
+				}
+				if (gResultF > 255) {
+					gResultF = 255;
+				}
+				if (rResultF > 255) {
+					rResultF = 255;
+				}
+
+				if (bResultC < 0) {
+					bResultC = 0;
+				}
+				if (gResultC < 0) {
+					gResultC = 0;
+				}
+				if (rResultC < 0) {
+					rResultC = 0;
+				}
+
+				if (bResultF < 0) {
+					bResultF = 0;
+				}
+				if (gResultF < 0) {
+					gResultF = 0;
+				}
+				if (rResultF < 0) {
+					rResultF = 0;
+				}
+
+				//Vec3b col(bResult, gResult, rResult);
+
+				grayrow[c][0] = (int)sqrt(pow(bResultC, 2) + pow(bResultF, 2));
+				grayrow[c][1] = (int)sqrt(pow(gResultC, 2) + pow(gResultF, 2));
+				grayrow[c][2] = (int)sqrt(pow(rResultC, 2) + pow(rResultF, 2));
+
+				/*dst.at<Vec3b>(Point(c, r))[0] = bResult;
+				dst.at<Vec3b>(Point(c, r))[1] = gResult;
+				dst.at<Vec3b>(Point(c, r))[2] = rResult;*/
+			}
+		}
+	}
+
 	static void ApliMask(Mat& src, Mat& dst, int x, int y, int** mask, int** mask2) {
 		int bResult = 0, gResult = 0, rResult = 0;
 		int xn = (x / 2 != 0) ? x / 2 : 1;
@@ -1060,9 +1352,7 @@ public:
 
 				//Vec3b col(bResult, gResult, rResult);
 
-				grayrow[c][0] = bResult;
-				grayrow[c][1] = gResult;
-				grayrow[c][2] = rResult;
+				
 
 				/*dst.at<Vec3b>(Point(c, r))[0] = bResult;
 				dst.at<Vec3b>(Point(c, r))[1] = gResult;
@@ -1074,6 +1364,180 @@ public:
 
 	}
 
+	
+	
+	static void Swirl(Mat& src, Mat& dst, double fdgree){
+		int bResult = 0, gResult = 0, rResult = 0;
+
+
+		Point mid;
+		mid.x = src.cols / 2;
+		mid.y = src.rows / 2;
+
+		
+
+		double theta=0, radius=0;
+		double newX = 0, newY = 0;
+
+		
+
+		for (int x = 0; x < src.cols; x++){
+			
+			for (int y = 0; y < src.rows; y++){
+				Vec3b* color = src.ptr<Vec3b>(y);
+				int trueX = x - mid.x;
+				int trueY = y - mid.y;
+				
+				theta = atan2((trueX), (trueY));
+				radius = sqrt((trueX*trueX) + (trueY*trueY));
+				bool malo = false;
+				newX = mid.x + (radius*sin(theta + fdgree*radius));
+				newY = mid.y + (radius*cos(theta + fdgree*radius));
+				if (newX<0 || newX>src.cols){
+					newX = x;
+					malo = true;
+				}
+				
+				
+				if (newY <0 || newY>src.rows){
+					newY = y;
+					malo = true;
+
+				}
+				if (!malo){
+					Vec3b* newrow = dst.ptr<Vec3b>(newY);
+					int b = color[x][2];
+					int g = color[x][1];
+					int r = color[x][0];
+
+					newrow[(int)newX][2] = b;
+					newrow[(int)newX][1] = g;
+					newrow[(int)newX][0] = r;
+				}
+				
+			
+				
+				
+				
+			}
+		}
+	}
+
+	static void Vortex(Mat& src, Mat& dst){
+		int bResult = 0, gResult = 0, rResult = 0;
+
+
+		Point mid;
+		mid.x = src.cols / 2;
+		mid.y = src.rows / 2;
+
+
+
+		double theta = 0, radius = 0;
+		double newX = 0, newY = 0;
+
+
+
+		for (int x = 0; x < src.cols; x++){
+
+			for (int y = 0; y < src.rows; y++){
+				Vec3b* color = src.ptr<Vec3b>(y);
+				int trueX = x - mid.x;
+				int trueY = y - mid.y;
+
+				theta = atan2((trueX), (trueY));
+				radius = sqrt((trueX*trueX) + (trueY*trueY));
+
+				double newRadius = pow(radius,2) / (max(mid.x, mid.y));
+				
+				newX = mid.x + (newRadius * sin(theta));
+				if (newX<0 || newX>src.cols ){
+					newX = 0;
+					newY = 0;
+
+				}
+				newY = mid.y + (newRadius * cos(theta));
+				if (newX<0 || newX>src.cols || newY <0 || newY>src.rows){
+					newX = 0;
+					newY = 0;
+				}
+
+
+				
+					Vec3b* newrow = dst.ptr<Vec3b>(newY);
+					int b = color[x][0];
+					int g = color[x][1];
+					int r = color[x][2];
+
+					newrow[(int)newX][0] = b;
+					newrow[(int)newX][1] = g;
+					newrow[(int)newX][2] = r;
+			
+
+
+
+
+
+			}
+		}
+	}
+
+	static void whater(Mat& src, Mat& dst, double nwave){
+		int bResult = 0, gResult = 0, rResult = 0;
+
+
+		Point mid;
+		mid.x = src.cols / 2;
+		mid.y = src.rows / 2;
+
+
+
+		double xo = 0, yo = 0;
+		double newX = 0, newY = 0;
+
+
+
+		for (int x = 0; x < src.cols; x++){
+
+			for (int y = 0; y < src.rows; y++){
+				Vec3b* color = src.ptr<Vec3b>(y);
+				int trueX = x - mid.x;
+				int trueY = y - mid.y;
+
+				xo = ((double)nwave * sin(2.0 * 3.1415 * (float)y / 128.0));;
+				yo = ((double)nwave * cos(2.0 * 3.1415 * (float)x / 128.0));
+				bool malo = false;
+				newX = (x + xo);
+				newY = (y + yo);
+				if (newX<0 || newX>src.cols){
+					newX = 0;
+					malo = true;
+				}
+
+
+				if (newY <0 || newY>src.rows){
+					newY = 0;
+					malo = true;
+
+				}
+				if (!malo){
+					Vec3b* newrow = dst.ptr<Vec3b>(newY);
+					int b = color[x][2];
+					int g = color[x][1];
+					int r = color[x][0];
+
+					newrow[(int)newX][2] = b;
+					newrow[(int)newX][1] = g;
+					newrow[(int)newX][0] = r;
+				}
+
+
+
+
+
+			}
+		}
+	}
 
 
 };
@@ -1082,6 +1546,51 @@ public:
 
 
 #pragma region FUNCIONES
+	static int CALLBACK BrowseCallbackProc(HWND hwnd, UINT uMsg, LPARAM lParam, LPARAM lpData)
+	{
+
+		if (uMsg == BFFM_INITIALIZED)
+		{
+			std::string tmp = (const char *)lpData;
+			std::cout << "path: " << tmp << std::endl;
+			SendMessage(hwnd, BFFM_SETSELECTION, TRUE, lpData);
+		}
+
+		return 0;
+	}
+	string BrowseFolder(std::string saved_path)
+	{
+		TCHAR path[MAX_PATH];
+
+		const char * path_param = saved_path.c_str();
+
+		BROWSEINFO bi = { 0 };
+		bi.lpszTitle = ("Browse for folder...");
+		bi.ulFlags = BIF_RETURNONLYFSDIRS | BIF_NEWDIALOGSTYLE;
+		bi.lpfn = BrowseCallbackProc;
+		bi.lParam = (LPARAM)path_param;
+
+		LPITEMIDLIST pidl = SHBrowseForFolder(&bi);
+
+		if (pidl != 0)
+		{
+			//get the name of the folder and put it in path
+			SHGetPathFromIDList(pidl, path);
+
+			//free memory used
+			IMalloc * imalloc = 0;
+			if (SUCCEEDED(SHGetMalloc(&imalloc)))
+			{
+				imalloc->Free(pidl);
+				imalloc->Release();
+			}
+
+			return path;
+		}
+
+		return "";
+	}
+
 	void reziseWindow(int an, int al) {
 
 		SetWindowPos(
@@ -1298,7 +1807,7 @@ public:
 				start = (double)getTickCount();
 				cam ->read( frame);
 
-				//resize(frame, dest, dest.size(), escalaX, escalaY, INTER_AREA);
+				
 				
 				
 				for (int i = 0; i < contador; i++){
@@ -1311,6 +1820,7 @@ public:
 							}break;
 
 							case LAPLACIAN:{
+								//Laplacian(frame, final, 8, 3, 1, 0, 4);
 								filtros::ApliMask(frame, final, 3, 3, laplacian_mask, LAPLACIAN);
 								final.copyTo(frame);
 							}break;
@@ -1345,13 +1855,13 @@ public:
 								final.copyTo(frame);
 							}break;
 
-							case CSOBEL:{
-								filtros::ApliMask(frame, final, 3, 3, cSobel_mask, LAPLACIAN);
+							case SOBEL:{
+								filtros::ApliSobelMask(frame, final, 3, 3, cSobel_mask,fSobel_mask, LAPLACIAN);
 								final.copyTo(frame);
 							}break;
 
-							case FSOBEL:{
-								filtros::ApliMask(frame, final, 3, 3, fSobel_mask, LAPLACIAN);
+							case SCHARR:{
+								filtros::ApliScharrMask(frame, final, 3, 3, scharrX_mask, scharrY_mask, LAPLACIAN);
 								final.copyTo(frame);
 							}break;
 
@@ -1361,7 +1871,10 @@ public:
 							}break;
 
 							case THRESH:{
-								filtros::threshold(frame, final, 198, 197);
+								//frame.copyTo(final);
+								//filtros::Swirl(frame, final, .04);
+								//filtros::whater(frame, final, 9);---Funciona
+								//filtros::Vortex(frame, final);--Funciona
 								final.copyTo(frame);								
 							}break;
 
